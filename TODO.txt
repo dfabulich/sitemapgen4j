@@ -1,0 +1,18 @@
+
+Ping search engines
+
+Text file reader
+Sitemap reader
+
+Improve validator for basic sitemap case (gzip, 10MB, urls, encoding)
+validate Mobile/Geo/Video/Code/News sitemaps
+
+
+JS api
+addUrl({url:"http://www.example.com",lastMod:"2007-08-01");
+new WebSitemapGenerator({});
+new SitemapIndexGenerator({});
+
+Google KML generation
+GeoRSS generation
+Google Code packagemap http://www.google.com/help/codesearch_packagemap.html
