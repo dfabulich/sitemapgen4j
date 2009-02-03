@@ -58,12 +58,12 @@ abstract class AbstractSitemapGeneratorOptions<THIS extends AbstractSitemapGener
 		return getThis();
 	}
 	/** Gzip the sitemaps after they are written to disk */
-	THIS gzip(boolean gzip) {
+	public THIS gzip(boolean gzip) {
 		this.gzip = gzip;
 		return getThis();
 	}
 	@SuppressWarnings("unchecked")
-	public THIS getThis() {
+	THIS getThis() {
 		return (THIS)this;
 	}
 }
