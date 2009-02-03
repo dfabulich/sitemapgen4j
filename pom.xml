@@ -24,6 +24,12 @@
       </plugin>
     </plugins>
   </build>
+  <distributionManagement>
+    <repository>
+        <id>sitemapgen4j-releases</id>
+        <url>file://${basedir}/../site/repo</url>
+    </repository>
+  </distributionManagement>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
