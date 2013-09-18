@@ -25,8 +25,8 @@ public class SitemapIndexGenerator {
 	private final W3CDateFormat dateFormat;
 	private final Date defaultLastMod;
 	private final boolean autoValidate;
-	/** Maximum 1,000 sitemaps per index allowed */
-	public static final int MAX_SITEMAPS_PER_INDEX = 1000;
+	/** Maximum 50,000 sitemaps per index allowed */
+	public static final int MAX_SITEMAPS_PER_INDEX = 50000;
 	
 	/** Options to configure sitemap index generation */
 	public static class Options {
