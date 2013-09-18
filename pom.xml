@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.google.code</groupId>
+  <groupId>com.github.dfabulich</groupId>
   <artifactId>sitemapgen4j</artifactId>
   <packaging>jar</packaging>
-  <version>1.1-SNAPSHOT</version>
+  <version>1.0.2-SNAPSHOT</version>
   <name>SitemapGen4J</name>
-  <url>http://code.google.com/p/sitemapgen4j/</url>
+  <url>https://github.com/dfabulich/sitemapgen4j/</url>
   <description>SitemapGen4j is an XML sitemap generator written in Java.</description>
   <licenses>
     <license>
@@ -16,10 +16,20 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:svn:http://sitemapgen4j.googlecode.com/svn/trunk/</connection>
-    <developerConnection>scm:svn:https://sitemapgen4j.googlecode.com/svn/trunk/</developerConnection>
-    <url>http://code.google.com/p/sitemapgen4j/source/browse/</url>
+    <connection>scm:git:git://github.com:dfabulich/sitemapgen4j.git</connection>
+    <developerConnection>scm:git:git@github.com:dfabulich/sitemapgen4j.git</developerConnection>
+    <url>https://github.com/dfabulich/sitemapgen4j/</url>
   </scm>
+  <developers>
+    <developer>
+      <id>dfabulich</id>
+      <name>Dan Fabulich</name>
+      <email>dan@fabulich.com</email>
+      <organization>Redfin</organization>
+      <organizationUrl>http://www.redfin.com/</organizationUrl>
+      <timezone>-8</timezone>
+    </developer>
+  </developers>
   <build>
     <defaultGoal>install</defaultGoal>
     <plugins>
@@ -37,12 +47,6 @@
       </plugin>
     </plugins>
   </build>
-  <distributionManagement>
-    <repository>
-        <id>sitemapgen4j-releases</id>
-        <url>file://${basedir}/../site/repo</url>
-    </repository>
-  </distributionManagement>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
