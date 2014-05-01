@@ -17,8 +17,7 @@ import org.xml.sax.SAXException;
  *
  */
 public class SitemapIndexGenerator {
-	private final URL baseUrl;
-	private final String baseUrlString;
+	private final URL baseUrl;	
 	private final File outFile;
 	private final ArrayList<SitemapIndexUrl> urls = new ArrayList<SitemapIndexUrl>();
 	private final int maxUrls;
@@ -115,8 +114,7 @@ public class SitemapIndexGenerator {
 	}
 	
 	private SitemapIndexGenerator(Options options) {
-		this.baseUrl = options.baseUrl;
-		this.baseUrlString = baseUrl.toString();
+		this.baseUrl = options.baseUrl;		
 		this.outFile = options.outFile;
 		this.maxUrls = options.maxUrls;
 		W3CDateFormat dateFormat = options.dateFormat;
@@ -128,7 +126,7 @@ public class SitemapIndexGenerator {
 	
 	/** Adds a single sitemap to the index */
 	public SitemapIndexGenerator addUrl(SitemapIndexUrl url) { 
-		UrlUtils.checkUrl(url.url.toString(), baseUrlString);
+		UrlUtils.checkUrl(url.url, baseUrl);
 		if (urls.size() >= maxUrls) {
 			throw new RuntimeException("More than " + maxUrls + " urls");
 		}

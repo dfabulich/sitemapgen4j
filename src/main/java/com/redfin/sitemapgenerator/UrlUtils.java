@@ -1,13 +1,19 @@
 package com.redfin.sitemapgenerator;
 
+import java.net.URL;
 import java.util.HashMap;
 
 class UrlUtils {
 
-	static void checkUrl(String url, String baseUrl) {
+	static void checkUrl(URL url, URL baseUrl) {
 		// Is there a better test to use here?
-		if (!url.startsWith(baseUrl)) {
-			throw new RuntimeException("Url " + url + " doesn't start with base URL " + baseUrl);
+		
+		if (baseUrl.getHost() == null) {
+			throw new RuntimeException("base URL is null");
+		}
+		
+		if (!baseUrl.getHost().equalsIgnoreCase(url.getHost())) {
+			throw new RuntimeException("Domain of URL " + url + " doesn't match base URL " + baseUrl);
 		}
 	}
 

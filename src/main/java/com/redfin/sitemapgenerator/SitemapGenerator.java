@@ -17,7 +17,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	/** 50000 URLs per sitemap maximum */
 	public static final int MAX_URLS_PER_SITEMAP = 50000;
 	
-	private final String baseUrl;
+	private final URL baseUrl;
 	private final File baseDir;
 	private final String fileNamePrefix;
 	private final String fileNameSuffix;
@@ -56,7 +56,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 */
 	public THIS addUrl(U url) {
 		if (finished) throw new RuntimeException("Sitemap already printed; you must create a new generator to make more sitemaps"); 
-		UrlUtils.checkUrl(url.getUrl().toString(), baseUrl);
+		UrlUtils.checkUrl(url.getUrl(), baseUrl);
 		if (urls.size() == maxUrls) {
 			if (!allowMultipleSitemaps) throw new RuntimeException("More than " + maxUrls + " urls, but allowMultipleSitemaps is false.  Enable allowMultipleSitemaps to split the sitemap into multiple files with a sitemap index.");
 			if (mapCount == 0) mapCount++;
@@ -169,12 +169,8 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	public void writeSitemapsWithIndex() {
 		if (!finished) throw new RuntimeException("Sitemaps not generated yet; call write() first");
 		File outFile = new File(baseDir, "sitemap_index.xml");
-		SitemapIndexGenerator sig;
-		try {
-			sig = new SitemapIndexGenerator.Options(baseUrl, outFile).dateFormat(dateFormat).autoValidate(autoValidate).build();
-		} catch (MalformedURLException e) {
-			throw new RuntimeException("bug", e);
-		}
+		SitemapIndexGenerator sig;		
+		sig = new SitemapIndexGenerator.Options(baseUrl, outFile).dateFormat(dateFormat).autoValidate(autoValidate).build();		
 		sig.addUrls(fileNamePrefix, fileNameSuffix, mapCount).write();
 	}
 	

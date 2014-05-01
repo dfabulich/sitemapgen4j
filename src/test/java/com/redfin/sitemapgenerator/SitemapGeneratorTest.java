@@ -161,6 +161,21 @@ public class SitemapGeneratorTest extends TestCase {
 			fail("wrong domain allowed to be added");
 		} catch (RuntimeException e) {}
 	}
+
+	public void testSameDomainDifferentSchemeOK() throws Exception {
+		wsg = new WebSitemapGenerator("http://www.example.com", dir);
+			
+		wsg.addUrl("https://www.example.com/index.html");
+		
+		String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
+				"<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" >\n" + 
+				"  <url>\n" + 
+				"    <loc>https://www.example.com/index.html</loc>\n" + 
+				"  </url>\n" + 
+				"</urlset>";
+		String sitemap = writeSingleSiteMap(wsg);
+		assertEquals(expected, sitemap);		
+	}
 	
 	public void testDoubleWrite() throws Exception {
 		testSimpleUrl();

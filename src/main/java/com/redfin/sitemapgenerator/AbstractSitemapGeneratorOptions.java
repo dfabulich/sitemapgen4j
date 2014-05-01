@@ -7,7 +7,7 @@ import java.net.URL;
 // It makes sense, I swear! http://madbean.com/2004/mb2004-3/
 abstract class AbstractSitemapGeneratorOptions<THIS extends AbstractSitemapGeneratorOptions<THIS>> {
 	File baseDir;
-	String baseUrl;
+	URL baseUrl;
 	String fileNamePrefix = "sitemap";
 	boolean allowMultipleSitemaps = true;
 	W3CDateFormat dateFormat;
@@ -19,7 +19,7 @@ abstract class AbstractSitemapGeneratorOptions<THIS extends AbstractSitemapGener
 		if (baseDir == null) throw new NullPointerException("baseDir may not be null");
 		if (baseUrl == null) throw new NullPointerException("baseUrl may not be null");
 		this.baseDir = baseDir;
-		this.baseUrl = baseUrl.toString();
+		this.baseUrl = baseUrl;
 	}
 	
 	/** The prefix of the name of the sitemaps we'll create; by default this is "sitemap" */
@@ -62,6 +62,7 @@ abstract class AbstractSitemapGeneratorOptions<THIS extends AbstractSitemapGener
 		this.gzip = gzip;
 		return getThis();
 	}
+	
 	@SuppressWarnings("unchecked")
 	THIS getThis() {
 		return (THIS)this;
