@@ -18,7 +18,7 @@ import java.util.Iterator;
 public class GoogleImagesSitemapGenerator extends
         SitemapGenerator<GoogleImagesSitemapUrl, GoogleImagesSitemapGenerator> {
 
-    private static final String IMAGE_NAMESPACE = "xmlns:image=\"http://www.google.com/schemas/sitemap-image/1.1\"";
+    private static final String SITE_IMAGE_NAMESPACE = "xmlns:image=\"http://www.google.com/schemas/sitemap-image/1.1\"";
 
     /**
      * Configures a builder so you can specify sitemap generator options
@@ -147,7 +147,7 @@ public class GoogleImagesSitemapGenerator extends
         }
 
         public String getXmlNamespaces() {
-            return IMAGE_NAMESPACE;
+            return SITE_IMAGE_NAMESPACE;
         }
     }
 }
