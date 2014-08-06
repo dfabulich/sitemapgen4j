@@ -191,9 +191,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 		try {
 			OutputStreamWriter out;
 			if (gzip) {
-				FileOutputStream fileStream = new FileOutputStream(outFile);
-				GZIPOutputStream gzipStream = new GZIPOutputStream(fileStream);
-				out = new OutputStreamWriter(gzipStream);
+                out = new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(outFile)));
 			} else {
 				out = new FileWriter(outFile);
 			}
