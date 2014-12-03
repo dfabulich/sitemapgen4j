@@ -187,12 +187,20 @@ public class SitemapIndexGenerator {
 	 * @param count the number of sitemaps (1-based)
 	 */
 	public SitemapIndexGenerator addUrls(String prefix, String suffix, int count) {
-		for (int i = 1; i <= count; i++) {
-			String fileName = prefix + i + suffix;
+		if (count == 0) {
 			try {
-				addUrl(new URL(baseUrl, fileName));
+				addUrl(new URL(baseUrl, prefix + suffix));
 			} catch (MalformedURLException e) {
 				throw new RuntimeException(e);
+			}
+		} else {
+			for (int i = 1; i <= count; i++) {
+				String fileName = prefix + i + suffix;
+				try {
+					addUrl(new URL(baseUrl, fileName));
+				} catch (MalformedURLException e) {
+					throw new RuntimeException(e);
+				}
 			}
 		}
 		return this;
