@@ -72,7 +72,7 @@ abstract class AbstractSitemapUrlOptions<U extends WebSitemapUrl, THIS extends A
 	/**
 	 * <p>The priority of this URL relative to other URLs on your site. Valid
 	 * values range from 0.0 to 1.0. This value does not affect how your
-	 * pages are compared to pages on other sites—it only lets the search
+	 * pages are compared to pages on other sites-it only lets the search
 	 * engines know which pages you deem most important for the crawlers.</p>
 	 * 
 	 * <p>The default priority of a page is 0.5.</p>
