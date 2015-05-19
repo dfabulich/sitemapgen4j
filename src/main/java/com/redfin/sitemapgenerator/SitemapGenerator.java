@@ -54,7 +54,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * @param url the URL to add to this sitemap
 	 * @return this
 	 */
-	public THIS addUrl(U url) {
+	public THIS addUrl(U url) throws InvalidURLException {
 		if (finished) throw new RuntimeException("Sitemap already printed; you must create a new generator to make more sitemaps"); 
 		UrlUtils.checkUrl(url.getUrl().toString(), baseUrl);
 		if (urls.size() == maxUrls) {
@@ -74,7 +74,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * @param urls the URLs to add to this sitemap
 	 * @return this
 	 */
-	public THIS addUrls(Iterable<? extends U> urls) {
+	public THIS addUrls(Iterable<? extends U> urls) throws InvalidURLException {
 		for (U url : urls) addUrl(url);
 		return getThis();
 	}
@@ -85,7 +85,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * @param urls the URLs to add to this sitemap
 	 * @return this
 	 */
-	public THIS addUrls(U... urls) {
+	public THIS addUrls(U... urls) throws InvalidURLException {
 		for (U url : urls) addUrl(url);
 		return getThis();
 	}
@@ -97,7 +97,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * @return this
 	 * @throws MalformedURLException
 	 */
-	public THIS addUrls(String... urls) throws MalformedURLException {
+	public THIS addUrls(String... urls) throws MalformedURLException, InvalidURLException {
 		for (String url : urls) addUrl(url);
 		return getThis();
 	}
@@ -109,7 +109,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * @return this
 	 * @throws MalformedURLException
 	 */
-	public THIS addUrl(String url) throws MalformedURLException {
+	public THIS addUrl(String url) throws MalformedURLException, InvalidURLException {
 		U sitemapUrl;
 		try {
 			sitemapUrl = renderer.getUrlClass().getConstructor(String.class).newInstance(url);
@@ -125,7 +125,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * @param urls the URLs to add to this sitemap
 	 * @return this
 	 */
-	public THIS addUrls(URL... urls) {
+	public THIS addUrls(URL... urls) throws InvalidURLException {
 		for (URL url : urls) addUrl(url);
 		return getThis();
 	}
@@ -136,7 +136,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * @param url the URL to add to this sitemap
 	 * @return this
 	 */
-	public THIS addUrl(URL url) {
+	public THIS addUrl(URL url) throws InvalidURLException {
 		U sitemapUrl;
 		try {
 			sitemapUrl = renderer.getUrlClass().getConstructor(URL.class).newInstance(url);
@@ -166,7 +166,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	/** After you've called {@link #write()}, call this to generate a sitemap index of all sitemaps you generated.  
 	 * 
 	 */
-	public void writeSitemapsWithIndex() {
+	public void writeSitemapsWithIndex() throws InvalidURLException {
 		if (!finished) throw new RuntimeException("Sitemaps not generated yet; call write() first");
 		File outFile = new File(baseDir, "sitemap_index.xml");
 		SitemapIndexGenerator sig;
@@ -176,6 +176,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 			throw new RuntimeException("bug", e);
 		}
 		sig.addUrls(fileNamePrefix, fileNameSuffix, mapCount).write();
+
 	}
 	
 	private void writeSiteMap() {
