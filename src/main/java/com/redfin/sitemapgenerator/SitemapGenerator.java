@@ -53,6 +53,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * or else write out one sitemap immediately.
 	 * @param url the URL to add to this sitemap
 	 * @return this
+	 * @throws InvalidURLException if the url does not match the baseUrl.
 	 */
 	public THIS addUrl(U url) throws InvalidURLException {
 		if (finished) throw new RuntimeException("Sitemap already printed; you must create a new generator to make more sitemaps"); 
@@ -73,6 +74,8 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * or write out one sitemap immediately.
 	 * @param urls the URLs to add to this sitemap
 	 * @return this
+	 * @throws InvalidURLException if any of the urls do not match the baseUrl.
+	 *
 	 */
 	public THIS addUrls(Iterable<? extends U> urls) throws InvalidURLException {
 		for (U url : urls) addUrl(url);
@@ -84,6 +87,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * or write out one sitemap immediately.
 	 * @param urls the URLs to add to this sitemap
 	 * @return this
+	 * @throws InvalidURLException if any of the urls do not match the baseUrl.
 	 */
 	public THIS addUrls(U... urls) throws InvalidURLException {
 		for (U url : urls) addUrl(url);
@@ -96,6 +100,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * @param urls the URLs to add to this sitemap
 	 * @return this
 	 * @throws MalformedURLException
+	 * @throws InvalidURLException if any of the urls do not match the baseUrl.
 	 */
 	public THIS addUrls(String... urls) throws MalformedURLException, InvalidURLException {
 		for (String url : urls) addUrl(url);
@@ -108,6 +113,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * @param url the URL to add to this sitemap
 	 * @return this
 	 * @throws MalformedURLException
+	 * @throws InvalidURLException if any of the urls do not match the baseUrl.
 	 */
 	public THIS addUrl(String url) throws MalformedURLException, InvalidURLException {
 		U sitemapUrl;
@@ -124,6 +130,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * or write out one sitemap immediately.
 	 * @param urls the URLs to add to this sitemap
 	 * @return this
+	 * @throws InvalidURLException if any of the urls do not match the baseUrl.
 	 */
 	public THIS addUrls(URL... urls) throws InvalidURLException {
 		for (URL url : urls) addUrl(url);
@@ -135,6 +142,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * or write out one sitemap immediately.
 	 * @param url the URL to add to this sitemap
 	 * @return this
+	 * @throws InvalidURLException if the url does not match the baseUrl.
 	 */
 	public THIS addUrl(URL url) throws InvalidURLException {
 		U sitemapUrl;
@@ -163,8 +171,8 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 		return outFiles;
 	}
 	
-	/** After you've called {@link #write()}, call this to generate a sitemap index of all sitemaps you generated.  
-	 * 
+	/** After you've called {@link #write()}, call this to generate a sitemap index of all sitemaps you generated.
+	 * @throws InvalidURLException
 	 */
 	public void writeSitemapsWithIndex() throws InvalidURLException {
 		if (!finished) throw new RuntimeException("Sitemaps not generated yet; call write() first");

@@ -1,7 +1,8 @@
 package com.redfin.sitemapgenerator;
 
 /**
- * Created by james on 5/19/15.
+ * @author James Brink
+ * A simple Exception to specify that a URL is invalid for a sitemap.
  */
 public class InvalidURLException extends Exception {
     public InvalidURLException(String message){

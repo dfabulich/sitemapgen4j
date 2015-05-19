@@ -126,7 +126,10 @@ public class SitemapIndexGenerator {
 		this.autoValidate = options.autoValidate;
 	}
 	
-	/** Adds a single sitemap to the index */
+	/** Adds a single sitemap to the index
+	 * @return this
+	 * @throws InvalidURLException if the url does not match the baseUrl.
+	 */
 	public SitemapIndexGenerator addUrl(SitemapIndexUrl url) throws InvalidURLException {
 		UrlUtils.checkUrl(url.url.toString(), baseUrlString);
 		if (urls.size() >= maxUrls) {
@@ -136,46 +139,73 @@ public class SitemapIndexGenerator {
 		return this;
 	}
 	
-	/** Add multiple sitemaps to the index */
+	/** Add multiple sitemaps to the index
+	 * @throws InvalidURLException if any of the urls do not match the baseUrl.
+	 */
 	public SitemapIndexGenerator addUrls(Iterable<? extends SitemapIndexUrl> urls) throws InvalidURLException {
 		for (SitemapIndexUrl url : urls) addUrl(url);
 		return this;
 	}
 	
-	/** Add multiple sitemaps to the index */
+	/** Add multiple sitemaps to the index
+	 * @return this
+	 * @throws InvalidURLException if any of the urls do not match the baseUrl.
+	 */
+
 	public SitemapIndexGenerator addUrls(SitemapIndexUrl... urls) throws InvalidURLException {
 		for (SitemapIndexUrl url : urls) addUrl(url);
 		return this;
 	}
 	
-	/** Add multiple sitemaps to the index */
+	/** Add multiple sitemaps to the index
+	 * @return this
+	 * @throws MalformedURLException if any of the urls are malformed.
+	 * @throws InvalidURLException if any of the urls do not match the baseUrl.
+	 */
 	public SitemapIndexGenerator addUrls(String... urls) throws MalformedURLException, InvalidURLException {
 		for (String url : urls) addUrl(url);
 		return this;
 	}
 	
-	/** Adds a single sitemap to the index */
+	/** Adds a single sitemap to the index
+	 * @return SitemapIndexGenerator
+	 * @throws MalformedURLException if the url is malformed.
+	 * @throws InvalidURLException if any of the urls do not match the baseUrl.
+	 */
 	public SitemapIndexGenerator addUrl(String url) throws MalformedURLException, InvalidURLException {
 		return addUrl(new SitemapIndexUrl(url));
 	}
 	
-	/** Add multiple sitemaps to the index */
+	/** Add multiple sitemaps to the index
+	 * @return this
+	 * @throws InvalidURLException if any of the urls do not match the baseUrl.
+	 */
 	public SitemapIndexGenerator addUrls(URL... urls) throws InvalidURLException {
 		for (URL url : urls) addUrl(url);
 		return this;
 	}
 	
-	/** Adds a single sitemap to the index */
+	/** Adds a single sitemap to the index
+	 * @return SitemapIndexGenerator
+	 * @throws InvalidURLException if the url does not match the baseUrl.
+	 */
 	public SitemapIndexGenerator addUrl(URL url) throws InvalidURLException {
 		return addUrl(new SitemapIndexUrl(url));
 	}
 	
-	/** Adds a single sitemap to the index */
+	/** Adds a single sitemap to the index
+	 * @return SitemapIndexGenerator
+	 * @throws InvalidURLException if the url does not match the baseUrl.
+	 */
 	public SitemapIndexGenerator addUrl(URL url, Date lastMod) throws InvalidURLException {
 		return addUrl(new SitemapIndexUrl(url, lastMod));
 	}
 	
-	/** Adds a single sitemap to the index */
+	/** Adds a single sitemap to the index
+	 * @return SitemapIndexGenerator
+	 * @throws MalformedURLException
+	 * @throws InvalidURLException if the url does not match the baseUrl.
+	 */
 	public SitemapIndexGenerator addUrl(String url, Date lastMod) throws MalformedURLException, InvalidURLException {
 		return addUrl(new SitemapIndexUrl(url, lastMod));
 	}
@@ -185,6 +215,8 @@ public class SitemapIndexGenerator {
 	 * @param prefix the first part of the filename e.g. "sitemap"
 	 * @param suffix the last part of the filename e.g. ".xml" or ".xml.gz"
 	 * @param count the number of sitemaps (1-based)
+	 * @return SitemapIndexGenerator
+	 * @throws InvalidURLException if any of the urls do not match the baseUrl.
 	 */
 	public SitemapIndexGenerator addUrls(String prefix, String suffix, int count) throws InvalidURLException {
 		if (count == 0) {
