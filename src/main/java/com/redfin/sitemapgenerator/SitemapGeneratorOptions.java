@@ -14,5 +14,13 @@ class SitemapGeneratorOptions extends
 	public SitemapGeneratorOptions(String baseUrl, File baseDir) throws MalformedURLException {
 		this(new URL(baseUrl), baseDir);
 	}
+	
+	public SitemapGeneratorOptions(URL baseUrl) {
+		super(baseUrl);
+	}
+	
+	public SitemapGeneratorOptions(String baseUrl) throws MalformedURLException {
+		super(new URL(baseUrl));
+	}
 
 }

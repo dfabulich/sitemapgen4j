@@ -291,6 +291,31 @@ public class SitemapGeneratorTest extends TestCase {
 		assertEquals("sitemap didn't match", SITEMAP1, actual);
 	}
 	
+	public void testBaseDirIsNullThrowsNullPointerException() throws Exception {
+		wsg = WebSitemapGenerator.builder("http://www.example.com", null).autoValidate(true).maxUrls(10).build();
+		wsg.addUrl("http://www.example.com/index.html");
+		Exception e = null;
+		try {
+			wsg.write();
+		} catch (Exception ex) {
+			e = ex;
+		}
+		assertTrue(e instanceof NullPointerException);
+		assertEquals("Correct exception was not thrown", e.getMessage(), "To write to files, baseDir must not be null");
+	}
+	
+	public void testWriteAsStringsMoreThanOneString() throws Exception {
+		wsg = WebSitemapGenerator.builder("http://www.example.com", null).autoValidate(true).maxUrls(10).build();
+		for (int i = 0; i < 9; i++) {
+			wsg.addUrl("http://www.example.com/"+i);
+		}
+		wsg.addUrl("http://www.example.com/9");
+		wsg.addUrl("http://www.example.com/just-one-more");
+		List<String> siteMapsAsStrings = wsg.writeAsStrings();
+		assertEquals("First string didn't match", SITEMAP1, siteMapsAsStrings.get(0));
+		assertEquals("Second string didn't match", SITEMAP_PLUS_ONE, siteMapsAsStrings.get(1));
+	}
+	
 	private String writeSingleSiteMap(WebSitemapGenerator wsg) {
 		List<File> files = wsg.write();
 		assertEquals("Too many files: " + files.toString(), 1, files.size());

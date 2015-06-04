@@ -1,8 +1,6 @@
 package com.redfin.sitemapgenerator;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -69,25 +67,43 @@ public class GoogleNewsSitemapGenerator extends SitemapGenerator<GoogleNewsSitem
 		this(new SitemapGeneratorOptions(baseUrl, baseDir));
 	}
 
+	/**Configures the generator with a base URL and a null directory. The object constructed
+	 * is not intended to be used to write to files. Rather, it is intended to be used to obtain
+	 * XML-formatted strings that represent sitemaps.
+	 * 
+	 * @param baseUrl All URLs in the generated sitemap(s) should appear under this base URL
+	 */
+	public GoogleNewsSitemapGenerator(String baseUrl) throws MalformedURLException {
+		this(new SitemapGeneratorOptions(new URL(baseUrl)));
+	}
+	
+	/**Configures the generator with a base URL and a null directory. The object constructed
+	 * is not intended to be used to write to files. Rather, it is intended to be used to obtain
+	 * XML-formatted strings that represent sitemaps.
+	 * 
+	 * @param baseUrl All URLs in the generated sitemap(s) should appear under this base URL
+	 */
+	public GoogleNewsSitemapGenerator(URL baseUrl) {
+		this(new SitemapGeneratorOptions(baseUrl));
+	}
+	
 	private static class Renderer extends AbstractSitemapUrlRenderer<GoogleNewsSitemapUrl> implements ISitemapUrlRenderer<GoogleNewsSitemapUrl> {
 
 		public Class<GoogleNewsSitemapUrl> getUrlClass() {
 			return GoogleNewsSitemapUrl.class;
 		}
 
-		public void render(GoogleNewsSitemapUrl url, OutputStreamWriter out,
-				W3CDateFormat dateFormat) throws IOException {
-			StringBuilder sb = new StringBuilder();
-			sb.append("    <news:news>\n");
-			renderTag(sb, "news", "publication_date", dateFormat.format(url.getPublicationDate()));
-			renderTag(sb, "news", "keywords", url.getKeywords());
-			sb.append("    </news:news>\n");
-			super.render(url, out, dateFormat, sb.toString());
-			
-		}
-
 		public String getXmlNamespaces() {
 			return "xmlns:news=\"http://www.google.com/schemas/sitemap-news/0.9\"";
+		}
+
+		public void render(GoogleNewsSitemapUrl url, StringBuilder sb, W3CDateFormat dateFormat) {
+			StringBuilder tagSb = new StringBuilder();
+			tagSb.append("    <news:news>\n");
+			renderTag(tagSb, "news", "publication_date", dateFormat.format(url.getPublicationDate()));
+			renderTag(tagSb, "news", "keywords", url.getKeywords());
+			tagSb.append("    </news:news>\n");
+			super.render(url, sb, dateFormat, tagSb.toString());
 		}
 		
 	}

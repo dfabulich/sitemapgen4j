@@ -1,8 +1,6 @@
 package com.redfin.sitemapgenerator;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -57,6 +55,25 @@ public class WebSitemapGenerator extends SitemapGenerator<WebSitemapUrl,WebSitem
 		this(new SitemapGeneratorOptions(baseUrl, baseDir));
 	}
 
+	/**Configures the generator with a base URL and a null directory. The object constructed
+	 * is not intended to be used to write to files. Rather, it is intended to be used to obtain
+	 * XML-formatted strings that represent sitemaps.
+	 * 
+	 * @param baseUrl All URLs in the generated sitemap(s) should appear under this base URL
+	 */
+	public WebSitemapGenerator(String baseUrl) throws MalformedURLException {
+		this(new SitemapGeneratorOptions(new URL(baseUrl)));
+	}
+	
+	/**Configures the generator with a base URL and a null directory. The object constructed
+	 * is not intended to be used to write to files. Rather, it is intended to be used to obtain
+	 * XML-formatted strings that represent sitemaps.
+	 * 
+	 * @param baseUrl All URLs in the generated sitemap(s) should appear under this base URL
+	 */
+	public WebSitemapGenerator(URL baseUrl) {
+		this(new SitemapGeneratorOptions(baseUrl));
+	}
 	
 	private static class Renderer extends AbstractSitemapUrlRenderer<WebSitemapUrl> implements ISitemapUrlRenderer<WebSitemapUrl> {
 
@@ -64,12 +81,12 @@ public class WebSitemapGenerator extends SitemapGenerator<WebSitemapUrl,WebSitem
 			return WebSitemapUrl.class;
 		}
 		
-		public void render(WebSitemapUrl url, OutputStreamWriter out, W3CDateFormat dateFormat) throws IOException {
-			super.render(url, out, dateFormat, null);
-		}
-
 		public String getXmlNamespaces() {
 			return null;
+		}
+
+		public void render(WebSitemapUrl url, StringBuilder sb, W3CDateFormat dateFormat) {
+			super.render(url, sb, dateFormat, null);
 		}
 
 	}

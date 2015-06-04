@@ -16,10 +16,13 @@ abstract class AbstractSitemapGeneratorOptions<THIS extends AbstractSitemapGener
 	boolean gzip = false;
 	
 	public AbstractSitemapGeneratorOptions(URL baseUrl, File baseDir) {
-		if (baseDir == null) throw new NullPointerException("baseDir may not be null");
 		if (baseUrl == null) throw new NullPointerException("baseUrl may not be null");
 		this.baseDir = baseDir;
 		this.baseUrl = baseUrl.toString();
+	}
+	
+	public AbstractSitemapGeneratorOptions(URL baseUrl) {
+		this(baseUrl, null);
 	}
 	
 	/** The prefix of the name of the sitemaps we'll create; by default this is "sitemap" */

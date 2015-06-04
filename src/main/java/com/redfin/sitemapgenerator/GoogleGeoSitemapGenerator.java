@@ -1,8 +1,6 @@
 package com.redfin.sitemapgenerator;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -57,6 +55,27 @@ public class GoogleGeoSitemapGenerator extends SitemapGenerator<GoogleGeoSitemap
 	public GoogleGeoSitemapGenerator(URL baseUrl, File baseDir) {
 		this(new SitemapGeneratorOptions(baseUrl, baseDir));
 	}
+	
+	/**Configures the generator with a base URL and a null directory. The object constructed
+	 * is not intended to be used to write to files. Rather, it is intended to be used to obtain
+	 * XML-formatted strings that represent sitemaps.
+	 * 
+	 * @param baseUrl All URLs in the generated sitemap(s) should appear under this base URL
+	 */
+	public GoogleGeoSitemapGenerator(String baseUrl) throws MalformedURLException {
+		this(new SitemapGeneratorOptions(new URL(baseUrl)));
+	}
+	
+	
+	/**Configures the generator with a base URL and a null directory. The object constructed
+	 * is not intended to be used to write to files. Rather, it is intended to be used to obtain
+	 * XML-formatted strings that represent sitemaps.
+	 * 
+	 * @param baseUrl All URLs in the generated sitemap(s) should appear under this base URL
+	 */
+	public GoogleGeoSitemapGenerator(URL baseUrl) {
+		this(new SitemapGeneratorOptions(baseUrl));
+	}
 
 	private static class Renderer extends AbstractSitemapUrlRenderer<GoogleGeoSitemapUrl> implements ISitemapUrlRenderer<GoogleGeoSitemapUrl> {
 
@@ -64,18 +83,16 @@ public class GoogleGeoSitemapGenerator extends SitemapGenerator<GoogleGeoSitemap
 			return GoogleGeoSitemapUrl.class;
 		}
 
-		public void render(GoogleGeoSitemapUrl url, OutputStreamWriter out,
-				W3CDateFormat dateFormat) throws IOException {
-			StringBuilder sb = new StringBuilder();
-			sb.append("    <geo:geo>\n");
-			sb.append("      <geo:format>"+url.getFormat()+"</geo:format>\n");
-			sb.append("    </geo:geo>\n");
-			super.render(url, out, dateFormat, sb.toString());
-			
-		}
-
 		public String getXmlNamespaces() {
 			return "xmlns:geo=\"http://www.google.com/geo/schemas/sitemap/1.0\"";
+		}
+
+		public void render(GoogleGeoSitemapUrl url, StringBuilder sb, W3CDateFormat dateFormat) {
+			StringBuilder tagSb = new StringBuilder();
+			tagSb.append("    <geo:geo>\n");
+			tagSb.append("      <geo:format>"+url.getFormat()+"</geo:format>\n");
+			tagSb.append("    </geo:geo>\n");
+			super.render(url, sb, dateFormat, tagSb.toString());
 		}
 		
 	}
