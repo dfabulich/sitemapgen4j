@@ -115,7 +115,7 @@ public class SitemapIndexGeneratorTest extends TestCase {
 		assertEquals(expected, actual);
 	}
 	
-	public void testAddByPrefix() throws MalformedURLException {
+	public void testAddByPrefix() throws MalformedURLException, InvalidURLException {
 		sig = new SitemapIndexGenerator.Options(EXAMPLE, outFile).autoValidate(true)
 			.defaultLastMod(new Date(0)).dateFormat(ZULU).build();
 		sig.addUrls("sitemap", ".xml", 10);

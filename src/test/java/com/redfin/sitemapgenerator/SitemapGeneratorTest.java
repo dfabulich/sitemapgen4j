@@ -153,13 +153,13 @@ public class SitemapGeneratorTest extends TestCase {
 		String sitemap = writeSingleSiteMap(wsg);
 		assertEquals(expected, sitemap);
 	}
-	
+
 	public void testBadUrl() throws Exception {
 		wsg = new WebSitemapGenerator("http://www.example.com", dir);
 		try {
 			wsg.addUrl("http://example.com/index.html");
 			fail("wrong domain allowed to be added");
-		} catch (RuntimeException e) {}
+		} catch (InvalidURLException e) {}
 	}
 	
 	public void testDoubleWrite() throws Exception {

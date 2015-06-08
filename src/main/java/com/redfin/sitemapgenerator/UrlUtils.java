@@ -4,10 +4,17 @@ import java.util.HashMap;
 
 class UrlUtils {
 
-	static void checkUrl(String url, String baseUrl) {
+	/**
+     * Verify that a url matches a baseUrl
+ 	 * @param url
+	 * @param baseUrl
+	 * @throws InvalidURLException if the url does not match the baseUrl.
+	 */
+
+	static void checkUrl(String url, String baseUrl) throws InvalidURLException {
 		// Is there a better test to use here?
 		if (!url.startsWith(baseUrl)) {
-			throw new RuntimeException("Url " + url + " doesn't start with base URL " + baseUrl);
+			throw new InvalidURLException("Url " + url + " doesn't start with base URL " + baseUrl);
 		}
 	}
 
