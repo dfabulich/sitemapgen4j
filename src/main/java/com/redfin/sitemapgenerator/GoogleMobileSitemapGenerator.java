@@ -1,8 +1,6 @@
 package com.redfin.sitemapgenerator;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -56,6 +54,26 @@ public class GoogleMobileSitemapGenerator extends SitemapGenerator<GoogleMobileS
 	public GoogleMobileSitemapGenerator(URL baseUrl, File baseDir) {
 		this(new SitemapGeneratorOptions(baseUrl, baseDir));
 	}
+	
+	/**Configures the generator with a base URL and a null directory. The object constructed
+	 * is not intended to be used to write to files. Rather, it is intended to be used to obtain
+	 * XML-formatted strings that represent sitemaps.
+	 * 
+	 * @param baseUrl All URLs in the generated sitemap(s) should appear under this base URL
+	 */
+	public GoogleMobileSitemapGenerator(String baseUrl) throws MalformedURLException {
+		this(new SitemapGeneratorOptions(new URL(baseUrl)));
+	}
+	
+	/**Configures the generator with a base URL and a null directory. The object constructed
+	 * is not intended to be used to write to files. Rather, it is intended to be used to obtain
+	 * XML-formatted strings that represent sitemaps.
+	 * 
+	 * @param baseUrl All URLs in the generated sitemap(s) should appear under this base URL
+	 */
+	public GoogleMobileSitemapGenerator(URL baseUrl) {
+		this(new SitemapGeneratorOptions(baseUrl));
+	}
 
 	private static class Renderer extends AbstractSitemapUrlRenderer<GoogleMobileSitemapUrl> implements ISitemapUrlRenderer<GoogleMobileSitemapUrl> {
 
@@ -63,15 +81,13 @@ public class GoogleMobileSitemapGenerator extends SitemapGenerator<GoogleMobileS
 			return GoogleMobileSitemapUrl.class;
 		}
 
-		public void render(GoogleMobileSitemapUrl url, OutputStreamWriter out,
-				W3CDateFormat dateFormat) throws IOException {
-			String additionalData = "    <mobile:mobile/>\n";
-			super.render(url, out, dateFormat, additionalData);
-			
-		}
-
 		public String getXmlNamespaces() {
 			return "xmlns:mobile=\"http://www.google.com/schemas/sitemap-mobile/1.0\"";
+		}
+
+		public void render(GoogleMobileSitemapUrl url, StringBuilder sb, W3CDateFormat dateFormat) {
+			String additionalData = "    <mobile:mobile/>\n";
+			super.render(url, sb, dateFormat, additionalData);
 		}
 		
 	}

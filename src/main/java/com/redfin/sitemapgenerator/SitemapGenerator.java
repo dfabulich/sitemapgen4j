@@ -59,10 +59,12 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 		UrlUtils.checkUrl(url.getUrl(), baseUrl);
 		if (urls.size() == maxUrls) {
 			if (!allowMultipleSitemaps) throw new RuntimeException("More than " + maxUrls + " urls, but allowMultipleSitemaps is false.  Enable allowMultipleSitemaps to split the sitemap into multiple files with a sitemap index.");
-			if (mapCount == 0) mapCount++;
-			writeSiteMap();
-			mapCount++;
-			urls.clear();
+			if (baseDir != null) {
+				if (mapCount == 0) mapCount++;
+				writeSiteMap();
+				mapCount++;
+				urls.clear();
+			}
 		}
 		urls.add(url);
 		return getThis();
@@ -163,6 +165,41 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 		return outFiles;
 	}
 	
+	/**
+	 * Writes out the sitemaps as a list of strings.
+	 * Each string in the list is a formatted list of URLs.
+	 * We return a list because the URLs may not all fit --
+	 * google specifies a maximum of 50,000 URLs in one sitemap.
+	 * @return a list of XML-formatted strings
+	 */
+	public List<String> writeAsStrings() {
+		List<String> listOfSiteMapStrings = new ArrayList<String>();
+		for (int start = 0; start < urls.size(); start += maxUrls) {
+			int end = start + maxUrls;
+			if (end > urls.size()) {
+				end = urls.size();
+			}
+			StringBuilder sb = new StringBuilder();
+			writeSiteMapAsString(sb, urls.subList(start, end));
+			listOfSiteMapStrings.add(sb.toString());
+		}
+		return listOfSiteMapStrings;
+	}
+	
+	private void writeSiteMapAsString(StringBuilder sb, List<U> urls) {
+		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+		sb.append("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" ");
+		if (renderer.getXmlNamespaces() != null) {
+			sb.append(renderer.getXmlNamespaces());
+			sb.append(' ');
+		}
+		sb.append(">\n");
+		for (U url : urls) {
+			renderer.render(url, sb, dateFormat);
+		}
+		sb.append("</urlset>");
+	}
+	
 	/** After you've called {@link #write()}, call this to generate a sitemap index of all sitemaps you generated.  
 	 * 
 	 */
@@ -175,6 +212,9 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	}
 	
 	private void writeSiteMap() {
+		if (baseDir == null) {
+			throw new NullPointerException("To write to files, baseDir must not be null");
+		}
 		if (urls.size() == 0) return;
 		String fileNamePrefix;
 		if (mapCount > 0) {
@@ -204,18 +244,9 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	}
 	
 	private void writeSiteMap(OutputStreamWriter out) throws IOException {
-		out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"); 
-		out.write("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" ");
-		
-		if (renderer.getXmlNamespaces() != null) {
-			out.write(renderer.getXmlNamespaces());
-			out.write(' ');
-		}
-		out.write(">\n");
-		for (U url : urls) {
-			renderer.render(url, out, dateFormat);
-		}
-		out.write("</urlset>");
+		StringBuilder sb = new StringBuilder();
+		writeSiteMapAsString(sb, urls);
+		out.write(sb.toString());
 		out.close();
 	}
 	

@@ -1,33 +1,31 @@
 package com.redfin.sitemapgenerator;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-
 abstract class AbstractSitemapUrlRenderer<T extends WebSitemapUrl> implements ISitemapUrlRenderer<T> {
-
-	public void render(WebSitemapUrl url, OutputStreamWriter out, W3CDateFormat dateFormat, String additionalData)
-			throws IOException {
-		out.write("  <url>\n");
-		out.write("    <loc>");
-		out.write(url.getUrl().toString());
-		out.write("</loc>\n");
+	
+	public void render(WebSitemapUrl url, StringBuilder sb, W3CDateFormat dateFormat, String additionalData) {
+		sb.append("  <url>\n");
+		sb.append("    <loc>");
+		sb.append(url.getUrl().toString());
+		sb.append("</loc>\n");
 		if (url.getLastMod() != null) {
-			out.write("    <lastmod>");
-			out.write(dateFormat.format(url.getLastMod()));
-			out.write("</lastmod>\n");
+			sb.append("    <lastmod>");
+			sb.append(dateFormat.format(url.getLastMod()));
+			sb.append("</lastmod>\n");
 		}
 		if (url.getChangeFreq() != null) {
-			out.write("    <changefreq>");
-			out.write(url.getChangeFreq().toString());
-			out.write("</changefreq>\n");
+			sb.append("    <changefreq>");
+			sb.append(url.getChangeFreq().toString());
+			sb.append("</changefreq>\n");
 		}
 		if (url.getPriority() != null) {
-			out.write("    <priority>");
-			out.write(url.getPriority().toString());
-			out.write("</priority>\n");
+			sb.append("    <priority>");
+			sb.append(url.getPriority().toString());
+			sb.append("</priority>\n");
 		}
-		if (additionalData != null) out.write(additionalData);
-		out.write("  </url>\n");
+		if (additionalData != null) {
+			sb.append(additionalData);
+		}
+		sb.append("  </url>\n");
 	}
 
 	public void renderTag(StringBuilder sb, String namespace, String tagName, Object value) {
