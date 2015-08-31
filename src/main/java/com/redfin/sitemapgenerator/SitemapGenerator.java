@@ -10,7 +10,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPOutputStream;
-
+import com.sun.deploy.util.StringUtils;
 import org.xml.sax.SAXException;
 
 abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGenerator<U,THIS>> {
@@ -30,7 +30,6 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	private final ISitemapUrlRenderer<U> renderer;
 	private int mapCount = 0;
 	private boolean finished = false;
-	
 	private final ArrayList<File> outFiles = new ArrayList<File>();
 	
 	public SitemapGenerator(AbstractSitemapGeneratorOptions<?> options, ISitemapUrlRenderer<U> renderer) {
@@ -45,7 +44,12 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 		autoValidate = options.autoValidate;
 		gzip = options.gzip;
 		this.renderer = renderer;
-		fileNameSuffix = gzip ? ".xml.gz" : ".xml";
+        if(options.addSuffix && options.suffixStringPattern != null && !options.suffixStringPattern.isEmpty()) {
+            fileNameSuffix = gzip ? options.suffixStringPattern + ".xml.gz" : options.suffixStringPattern + ".xml";
+        }
+        else {
+            fileNameSuffix = gzip ? ".xml.gz" : ".xml";
+        }
 	}
 	
 	/** Add one URL of the appropriate type to this sitemap.
