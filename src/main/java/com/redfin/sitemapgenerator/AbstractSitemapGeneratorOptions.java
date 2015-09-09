@@ -10,6 +10,7 @@ abstract class AbstractSitemapGeneratorOptions<THIS extends AbstractSitemapGener
 	URL baseUrl;
 	String fileNamePrefix = "sitemap";
 	boolean allowMultipleSitemaps = true;
+	String suffixStringPattern; // this will store some type of string pattern suitable per needs.
 	W3CDateFormat dateFormat;
 	int maxUrls = SitemapGenerator.MAX_URLS_PER_SITEMAP;
 	boolean autoValidate = false;
@@ -31,6 +32,12 @@ abstract class AbstractSitemapGeneratorOptions<THIS extends AbstractSitemapGener
 		this.fileNamePrefix = fileNamePrefix;
 		return getThis();
 	}
+
+	public THIS suffixStringPattern(String pattern) {
+		this.suffixStringPattern = pattern;
+		return getThis();
+	}
+
 	/** When more than the maximum number of URLs are passed in, should we split into multiple sitemaps automatically, or just throw an exception? */
 	public THIS allowMultipleSitemaps(boolean allowMultipleSitemaps) {
 		this.allowMultipleSitemaps = allowMultipleSitemaps;

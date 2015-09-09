@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.util.Date;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
@@ -192,7 +193,23 @@ public class SitemapGeneratorTest extends TestCase {
 			fail("Empty write is not allowed");
 		} catch (RuntimeException e) {}
 	}
-	
+
+	public void testSuffixPresent() throws MalformedURLException {
+		wsg = WebSitemapGenerator.builder("http://www.example.com", dir).suffixStringPattern("01").build();
+        wsg.addUrl("http://www.example.com/url1");
+        wsg.addUrl("http://www.example.com/url2");
+		List<File> files = wsg.write();
+		assertEquals("Sitemap has a suffix now", "sitemap01.xml", files.get(0).getName());
+	}
+
+    public void testNullSuffixPassed() throws MalformedURLException {
+        wsg = WebSitemapGenerator.builder("http://www.example.com", dir).suffixStringPattern("").build();
+        wsg.addUrl("http://www.example.com/url1");
+        wsg.addUrl("http://www.example.com/url2");
+        List<File> files = wsg.write();
+        assertEquals("Sitemap has a suffix now", "sitemap.xml", files.get(0).getName());
+    }
+
 	public void testTooManyUrls() throws Exception {
 		wsg = WebSitemapGenerator.builder("http://www.example.com", dir).allowMultipleSitemaps(false).build();
 		for (int i = 0; i < SitemapGenerator.MAX_URLS_PER_SITEMAP; i++) {

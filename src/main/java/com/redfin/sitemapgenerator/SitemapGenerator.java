@@ -45,9 +45,15 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 		autoValidate = options.autoValidate;
 		gzip = options.gzip;
 		this.renderer = renderer;
-		fileNameSuffix = gzip ? ".xml.gz" : ".xml";
+
+		if(options.suffixStringPattern != null && !options.suffixStringPattern.isEmpty()) {
+			fileNameSuffix = gzip ? options.suffixStringPattern + ".xml.gz" : options.suffixStringPattern + ".xml";
+		}
+		else {
+			fileNameSuffix = gzip ? ".xml.gz" : ".xml";
+		}
 	}
-	
+
 	/** Add one URL of the appropriate type to this sitemap.
 	 * If we have reached the maximum number of URLs, we'll throw an exception if {@link #allowMultipleSitemaps} is false,
 	 * or else write out one sitemap immediately.
