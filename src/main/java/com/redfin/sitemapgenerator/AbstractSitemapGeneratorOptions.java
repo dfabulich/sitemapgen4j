@@ -15,17 +15,17 @@ abstract class AbstractSitemapGeneratorOptions<THIS extends AbstractSitemapGener
 	int maxUrls = SitemapGenerator.MAX_URLS_PER_SITEMAP;
 	boolean autoValidate = false;
 	boolean gzip = false;
-	
+
 	public AbstractSitemapGeneratorOptions(URL baseUrl, File baseDir) {
 		if (baseUrl == null) throw new NullPointerException("baseUrl may not be null");
 		this.baseDir = baseDir;
 		this.baseUrl = baseUrl;
 	}
-	
+
 	public AbstractSitemapGeneratorOptions(URL baseUrl) {
 		this(baseUrl, null);
 	}
-	
+
 	/** The prefix of the name of the sitemaps we'll create; by default this is "sitemap" */
 	public THIS fileNamePrefix(String fileNamePrefix) {
 		if (fileNamePrefix == null) throw new NullPointerException("fileNamePrefix may not be null");
@@ -72,7 +72,7 @@ abstract class AbstractSitemapGeneratorOptions<THIS extends AbstractSitemapGener
 		this.gzip = gzip;
 		return getThis();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	THIS getThis() {
 		return (THIS)this;
