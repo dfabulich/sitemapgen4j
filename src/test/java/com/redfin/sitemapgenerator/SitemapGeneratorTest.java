@@ -347,6 +347,24 @@ public class SitemapGeneratorTest extends TestCase {
 		assertEquals("First string didn't match", SITEMAP1, siteMapsAsStrings.get(0));
 		assertEquals("Second string didn't match", SITEMAP_PLUS_ONE, siteMapsAsStrings.get(1));
 	}
+
+	public void testWriteEmptySitemap() throws Exception {
+		wsg = WebSitemapGenerator.builder("http://www.example.com", dir).allowEmptySitemap(true).build();
+		String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+				"<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" >\n" +
+				"</urlset>";
+		String sitemap = writeSingleSiteMap(wsg);
+		assertEquals(expected, sitemap);
+	}
+
+	public void testMaxUrlsAllowingEmptyDoesNotWriteExtraSitemap() throws Exception {
+		wsg = WebSitemapGenerator.builder("http://www.example.com", dir).allowEmptySitemap(true).maxUrls(10).build();
+		for (int i = 0; i < 10; i++) {
+			wsg.addUrl("http://www.example.com/"+i);
+		}
+		String sitemap = writeSingleSiteMap(wsg);
+		assertEquals(SITEMAP1, sitemap);
+	}
 	
 	private String writeSingleSiteMap(WebSitemapGenerator wsg) {
 		List<File> files = wsg.write();

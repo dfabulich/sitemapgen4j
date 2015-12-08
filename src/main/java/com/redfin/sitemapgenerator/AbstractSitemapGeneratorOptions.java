@@ -9,6 +9,7 @@ abstract class AbstractSitemapGeneratorOptions<THIS extends AbstractSitemapGener
 	File baseDir;
 	URL baseUrl;
 	String fileNamePrefix = "sitemap";
+	boolean allowEmptySitemap = false;
 	boolean allowMultipleSitemaps = true;
 	String suffixStringPattern; // this will store some type of string pattern suitable per needs.
 	W3CDateFormat dateFormat;
@@ -35,6 +36,17 @@ abstract class AbstractSitemapGeneratorOptions<THIS extends AbstractSitemapGener
 
 	public THIS suffixStringPattern(String pattern) {
 		this.suffixStringPattern = pattern;
+		return getThis();
+	}
+
+	/**
+	 * Permit writing a sitemap that contains no URLs.
+	 *
+	 * @param allowEmpty {@code true} if an empty sitemap is permissible
+	 * @return this instance, for chaining
+	 */
+	public THIS allowEmptySitemap(boolean allowEmpty) {
+		this.allowEmptySitemap = allowEmpty;
 		return getThis();
 	}
 
