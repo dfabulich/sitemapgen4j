@@ -19,6 +19,7 @@ import org.xml.sax.SAXException;
 public class SitemapIndexGenerator {
 	private final URL baseUrl;	
 	private final File outFile;
+	private final boolean allowEmptyIndex;
 	private final ArrayList<SitemapIndexUrl> urls = new ArrayList<SitemapIndexUrl>();
 	private final int maxUrls;
 	private final W3CDateFormat dateFormat;
@@ -32,6 +33,7 @@ public class SitemapIndexGenerator {
 		private URL baseUrl;
 		private File outFile;
 		private W3CDateFormat dateFormat = null;
+		private boolean allowEmptyIndex = false;
 		private int maxUrls = MAX_SITEMAPS_PER_INDEX;
 		private Date defaultLastMod = new Date();
 		private boolean autoValidate = false;
@@ -59,6 +61,18 @@ public class SitemapIndexGenerator {
 			this.dateFormat = dateFormat;
 			return this;
 		}
+
+		/**
+		 * Permit writing an index that contains no URLs.
+		 *
+		 * @param allowEmptyIndex {@code true} if an empty index is permissible
+		 * @return this instance, for chaining
+		 */
+		public Options allowEmptyIndex(boolean allowEmptyIndex) {
+			this.allowEmptyIndex = allowEmptyIndex;
+			return this;
+		}
+
 		/**
 		 * The maximum number of sitemaps to allow per sitemap index; the default is the
 		 * maximum allowed (1,000), but you can decrease it if you wish (for testing)
@@ -116,6 +130,7 @@ public class SitemapIndexGenerator {
 	private SitemapIndexGenerator(Options options) {
 		this.baseUrl = options.baseUrl;		
 		this.outFile = options.outFile;
+		this.allowEmptyIndex = options.allowEmptyIndex;
 		this.maxUrls = options.maxUrls;
 		W3CDateFormat dateFormat = options.dateFormat;
 		if (dateFormat == null) dateFormat = new W3CDateFormat();
@@ -206,7 +221,7 @@ public class SitemapIndexGenerator {
 	
 	/** Writes out the sitemap index */
 	public void write() {
-		if (urls.size() == 0) throw new RuntimeException("No URLs added, sitemap index would be empty; you must add some URLs with addUrls");
+		if (!allowEmptyIndex && urls.isEmpty()) throw new RuntimeException("No URLs added, sitemap index would be empty; you must add some URLs with addUrls");
 		try {
 			// TODO gzip? is that legal for a sitemap index?
 			FileWriter out = new FileWriter(outFile);
