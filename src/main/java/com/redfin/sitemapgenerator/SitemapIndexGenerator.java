@@ -225,7 +225,7 @@ public class SitemapIndexGenerator {
 		for (SitemapIndexUrl url : urls) {
 			out.write("  <sitemap>\n");
 			out.write("    <loc>");
-			out.write(url.url.toString());
+			out.write(UrlUtils.escapeXml(url.url.toString()));
 			out.write("</loc>\n");
 			Date lastMod = url.lastMod;
 			
