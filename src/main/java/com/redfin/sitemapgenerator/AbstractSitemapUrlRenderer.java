@@ -1,11 +1,13 @@
 package com.redfin.sitemapgenerator;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 abstract class AbstractSitemapUrlRenderer<T extends WebSitemapUrl> implements ISitemapUrlRenderer<T> {
 	
 	public void render(WebSitemapUrl url, StringBuilder sb, W3CDateFormat dateFormat, String additionalData) {
 		sb.append("  <url>\n");
 		sb.append("    <loc>");
-		sb.append(url.getUrl().toString());
+		sb.append(StringEscapeUtils.escapeXml10(url.getUrl().toString()));
 		sb.append("</loc>\n");
 		if (url.getLastMod() != null) {
 			sb.append("    <lastmod>");
@@ -35,7 +37,7 @@ abstract class AbstractSitemapUrlRenderer<T extends WebSitemapUrl> implements IS
 		sb.append(':');
 		sb.append(tagName);
 		sb.append('>');
-		sb.append(value);
+		sb.append(StringEscapeUtils.escapeXml10(value.toString()));
 		sb.append("</");
 		sb.append(namespace);
 		sb.append(':');
