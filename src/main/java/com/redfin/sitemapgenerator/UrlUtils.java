@@ -5,10 +5,10 @@ import java.util.HashMap;
 
 class UrlUtils {
 	static String escapeXml(String string){
-		return string.replaceAll("&", "&amp;")
+		return string
+		.replaceAll("&", "&amp;")
 		.replaceAll("'", "&apos;")
 		.replaceAll("\"", "&quot;")
-		.replaceAll(">", "&gt;")
 		.replaceAll(">", "&gt;")
 		.replaceAll("<", "&lt;");
 	}
