@@ -4,7 +4,14 @@ import java.net.URL;
 import java.util.HashMap;
 
 class UrlUtils {
-
+	static String escapeXml(String string){
+		return string.replaceAll("&", "&amp;")
+		.replaceAll("'", "&apos;")
+		.replaceAll("\"", "&quot;")
+		.replaceAll(">", "&gt;")
+		.replaceAll(">", "&gt;")
+		.replaceAll("<", "&lt;");
+	}
 	static void checkUrl(URL url, URL baseUrl) {
 		// Is there a better test to use here?
 		
