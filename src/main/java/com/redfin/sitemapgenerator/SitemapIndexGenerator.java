@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.xml.sax.SAXException;
-import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  * Builds a sitemap index, which points only to other sitemaps.
@@ -226,7 +225,7 @@ public class SitemapIndexGenerator {
 		for (SitemapIndexUrl url : urls) {
 			out.write("  <sitemap>\n");
 			out.write("    <loc>");
-			out.write(StringEscapeUtils.escapeXml10(url.url.toString()));
+			out.write(url.url.toString());
 			out.write("</loc>\n");
 			Date lastMod = url.lastMod;
 			
