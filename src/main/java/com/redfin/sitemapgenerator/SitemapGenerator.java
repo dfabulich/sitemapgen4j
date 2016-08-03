@@ -21,6 +21,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	private final File baseDir;
 	private final String fileNamePrefix;
 	private final String fileNameSuffix;
+	private final boolean allowEmptySitemap;
 	private final boolean allowMultipleSitemaps;
 	private final ArrayList<U> urls = new ArrayList<U>();
 	private final W3CDateFormat dateFormat;
@@ -40,6 +41,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 		W3CDateFormat dateFormat = options.dateFormat;
 		if (dateFormat == null) dateFormat = new W3CDateFormat();
 		this.dateFormat = dateFormat;
+		allowEmptySitemap = options.allowEmptySitemap;
 		allowMultipleSitemaps = options.allowMultipleSitemaps;
 		maxUrls = options.maxUrls;
 		autoValidate = options.autoValidate;
@@ -165,7 +167,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 */
 	public List<File> write() {
 		if (finished) throw new RuntimeException("Sitemap already printed; you must create a new generator to make more sitemaps");
-		if (urls.size() == 0 && mapCount == 0) throw new RuntimeException("No URLs added, sitemap would be empty; you must add some URLs with addUrls");
+		if (!allowEmptySitemap && urls.isEmpty() && mapCount == 0) throw new RuntimeException("No URLs added, sitemap would be empty; you must add some URLs with addUrls");
 		writeSiteMap();
 		finished = true;
 		return outFiles;
@@ -221,7 +223,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 		if (baseDir == null) {
 			throw new NullPointerException("To write to files, baseDir must not be null");
 		}
-		if (urls.size() == 0) return;
+		if (urls.isEmpty() && (mapCount > 0 || !allowEmptySitemap)) return;
 		String fileNamePrefix;
 		if (mapCount > 0) {
 			fileNamePrefix = this.fileNamePrefix + mapCount;

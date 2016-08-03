@@ -86,6 +86,16 @@ public class SitemapIndexGeneratorTest extends TestCase {
 			fail("Allowed write with no URLs");
 		} catch (RuntimeException e) {}
 	}
+
+	public void testNoUrlsEmptyIndexAllowed() throws Exception {
+		sig = new SitemapIndexGenerator.Options(EXAMPLE, outFile).allowEmptyIndex(true).build();
+		sig.write();
+		String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+				"<sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n" +
+				"</sitemapindex>";
+		String actual = TestUtil.slurpFileAndDelete(outFile);
+		assertEquals(expected, actual);
+	}
 	
 	public void testMaxUrls() throws Exception {
 		sig = new SitemapIndexGenerator.Options(EXAMPLE, outFile).autoValidate(true)
