@@ -4,7 +4,7 @@
   <groupId>com.github.dfabulich</groupId>
   <artifactId>sitemapgen4j</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.6</version>
+  <version>1.0.7-SNAPSHOT</version>
   <name>SitemapGen4J</name>
   <url>https://github.com/dfabulich/sitemapgen4j/</url>
   <description>SitemapGen4j is an XML sitemap generator written in Java.</description>
