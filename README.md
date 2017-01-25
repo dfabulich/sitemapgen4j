@@ -67,7 +67,7 @@ One sitemap can contain a maximum of 50,000 URLs.  (Some sitemaps, like Google N
 
 ```java
 WebSitemapGenerator wsg = new WebSitemapGenerator("http://www.example.com", myDir);
-for (int i = 0; i &lt; 60000; i++) wsg.addUrl("http://www.example.com/doc"+i+".html");
+for (int i = 0; i < 60000; i++) wsg.addUrl("http://www.example.com/doc"+i+".html");
 wsg.write();
 wsg.writeSitemapsWithIndex(); // generate the sitemap_index.xml
 
@@ -82,12 +82,12 @@ WebSitemapGenerator wsg;
 // generate foo sitemap
 wsg = WebSitemapGenerator.builder("http://www.example.com", myDir)
     .fileNamePrefix("foo").build();
-for (int i = 0; i &lt; 5; i++) wsg.addUrl("http://www.example.com/foo"+i+".html");
+for (int i = 0; i < 5; i++) wsg.addUrl("http://www.example.com/foo"+i+".html");
 wsg.write();
 // generate bar sitemap
 wsg = WebSitemapGenerator.builder("http://www.example.com", myDir)
     .fileNamePrefix("bar").build();
-for (int i = 0; i &lt; 5; i++) wsg.addUrl("http://www.example.com/bar"+i+".html");
+for (int i = 0; i < 5; i++) wsg.addUrl("http://www.example.com/bar"+i+".html");
 wsg.write();
 // generate sitemap index for foo + bar 
 SitemapIndexGenerator sig = new SitemapIndexGenerator("http://www.example.com", myFile);
