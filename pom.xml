@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.github.dfabulich</groupId>
+  <groupId>com.github.sergiovm</groupId>
   <artifactId>sitemapgen4j</artifactId>
   <packaging>jar</packaging>
   <version>1.0.7-SNAPSHOT</version>
   <name>SitemapGen4J</name>
-  <url>https://github.com/dfabulich/sitemapgen4j/</url>
+  <url>https://github.com/sergiovm/sitemapgen4j</url>
   <description>SitemapGen4j is an XML sitemap generator written in Java.</description>
   <licenses>
     <license>
@@ -16,33 +16,13 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:git:git://github.com:dfabulich/sitemapgen4j.git</connection>
-    <developerConnection>scm:git:git@github.com:dfabulich/sitemapgen4j.git</developerConnection>
-    <url>https://github.com/dfabulich/sitemapgen4j/</url>
+    <connection>scm:git:git://github.com:sergiovm/sitemapgen4j.git</connection>
+    <developerConnection>scm:git:git@github.com:sergiovm/sitemapgen4j.git</developerConnection>
+    <url>https://github.com/sergiovm/sitemapgen4j/</url>
   </scm>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-  <developers>
-    <developer>
-      <id>dfabulich</id>
-      <name>Dan Fabulich</name>
-      <email>dan@fabulich.com</email>
-      <organization>Redfin</organization>
-      <organizationUrl>http://www.redfin.com/</organizationUrl>
-      <timezone>-8</timezone>
-    </developer>
-  </developers>
-  <distributionManagement>
-    <snapshotRepository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-    <repository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-  </distributionManagement>
   <build>
     <defaultGoal>install</defaultGoal>
     <plugins>
@@ -87,31 +67,6 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-gpg-plugin</artifactId>
-        <version>1.5</version>
-        <executions>
-          <execution>
-            <id>sign-artifacts</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>sign</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.sonatype.plugins</groupId>
-        <artifactId>nexus-staging-maven-plugin</artifactId>
-        <version>1.6.3</version>
-        <extensions>true</extensions>
-        <configuration>
-           <serverId>ossrh</serverId>
-           <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-           <autoReleaseAfterClose>false</autoReleaseAfterClose>
-        </configuration>
       </plugin>
     </plugins>
   </build>

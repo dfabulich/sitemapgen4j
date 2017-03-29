@@ -315,6 +315,7 @@ public class SitemapGeneratorTest extends TestCase {
 			while ((c = reader.read()) != -1) {
 				sb.append((char)c);
 			}
+			reader.close();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
