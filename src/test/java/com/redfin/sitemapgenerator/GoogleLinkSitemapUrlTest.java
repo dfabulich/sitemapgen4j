@@ -31,13 +31,13 @@ public class GoogleLinkSitemapUrlTest extends TestCase {
         dir = null;
     }
 
-    public void testSimpleUrl() throws Exception {
+    public void testSimpleUrlWithHrefLang() throws Exception {
 
         wsg = new GoogleLinkSitemapGenerator("http://www.example.com", dir);
-        final Map<String, String> alternates = new LinkedHashMap<String, String>();
-        alternates.put("en-GB", "http://www.example/en/index.html");
-        alternates.put("fr-FR", "http://www.example/fr/index.html");
-        alternates.put("es-ES", "http://www.example/es/index.html");
+        final Map<String, Map<String, String>> alternates = new LinkedHashMap<String, Map<String, String>>();
+        alternates.put("http://www.example/en/index.html", Collections.singletonMap("hreflang", "en-GB"));
+        alternates.put("http://www.example/fr/index.html", Collections.singletonMap("hreflang", "fr-FR"));
+        alternates.put("http://www.example/es/index.html", Collections.singletonMap("hreflang", "es-ES"));
 
         final GoogleLinkSitemapUrl url = new GoogleLinkSitemapUrl("http://www.example.com/index.html", alternates);
         wsg.addUrl(url);
@@ -60,6 +60,44 @@ public class GoogleLinkSitemapUrlTest extends TestCase {
             + "    <xhtml:link\n"
             + "      rel=\"alternate\"\n"
             + "      hreflang=\"es-ES\"\n"
+            + "      href=\"http://www.example/es/index.html\"\n"
+            + "    />\n"
+            + "  </url>\n"
+            + "</urlset>";
+        //@formatter:on
+        final String sitemap = writeSingleSiteMap(wsg);
+        assertEquals(expected, sitemap);
+    }
+
+    public void testSimpleUrlWithMedia() throws Exception {
+
+        wsg = new GoogleLinkSitemapGenerator("http://www.example.com", dir);
+        final Map<String, Map<String, String>> alternates = new LinkedHashMap<String, Map<String, String>>();
+        alternates.put("http://www.example/en/index.html", Collections.singletonMap("media", "only screen and (max-width: 640px)"));
+        alternates.put("http://www.example/fr/index.html", Collections.singletonMap("media", "only screen and (max-width: 640px)"));
+        alternates.put("http://www.example/es/index.html", Collections.singletonMap("media", "only screen and (max-width: 640px)"));
+
+        final GoogleLinkSitemapUrl url = new GoogleLinkSitemapUrl("http://www.example.com/index.html", alternates);
+        wsg.addUrl(url);
+        //@formatter:off
+        final String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+            + "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" "
+            + "xmlns:xhtml=\"http://www.w3.org/1999/xhtml\" >\n"
+            + "  <url>\n"
+            + "    <loc>http://www.example.com/index.html</loc>\n"
+            + "    <xhtml:link\n"
+            + "      rel=\"alternate\"\n"
+            + "      media=\"only screen and (max-width: 640px)\"\n"
+            + "      href=\"http://www.example/en/index.html\"\n"
+            + "    />\n"
+            + "    <xhtml:link\n"
+            + "      rel=\"alternate\"\n"
+            + "      media=\"only screen and (max-width: 640px)\"\n"
+            + "      href=\"http://www.example/fr/index.html\"\n"
+            + "    />\n"
+            + "    <xhtml:link\n"
+            + "      rel=\"alternate\"\n"
+            + "      media=\"only screen and (max-width: 640px)\"\n"
             + "      href=\"http://www.example/es/index.html\"\n"
             + "    />\n"
             + "  </url>\n"

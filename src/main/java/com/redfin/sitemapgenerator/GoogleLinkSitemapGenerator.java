@@ -3,6 +3,7 @@ package com.redfin.sitemapgenerator;
 import java.io.File;
 import java.net.*;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Map.Entry;
 
 /**
@@ -10,6 +11,7 @@ import java.util.Map.Entry;
  *
  * @author Sergio Vico
  * @see <a href="https://support.google.com/webmasters/answer/2620865">Creating alternate language pages Sitemaps</a>
+ * @see <a href="https://developers.google.com/search/mobile-sites/mobile-seo/separate-urls?hl=en">Mobile SEO configurations | Separate URLs </a>
  */
 public class GoogleLinkSitemapGenerator extends SitemapGenerator<GoogleLinkSitemapUrl, GoogleLinkSitemapGenerator> {
 
@@ -29,11 +31,13 @@ public class GoogleLinkSitemapGenerator extends SitemapGenerator<GoogleLinkSitem
         public void render(final GoogleLinkSitemapUrl url, final StringBuilder sb, final W3CDateFormat dateFormat) {
 
             final StringBuilder tagSb = new StringBuilder();
-            for (final Entry<Locale, URL> entry : url.getAlternates().entrySet()) {
+            for (final Entry<URL, Map<String, String>> entry : url.getAlternates().entrySet()) {
                 tagSb.append("    <xhtml:link\n");
                 tagSb.append("      rel=\"alternate\"\n");
-                tagSb.append("      hreflang=\"" + entry.getKey().toLanguageTag() + "\"\n");
-                tagSb.append("      href=\"" + UrlUtils.escapeXml(entry.getValue().toString()) + "\"\n");
+                for(final Entry<String, String> innerEntry : entry.getValue().entrySet()){
+                    tagSb.append("      " + innerEntry.getKey() + "=\"" + innerEntry.getValue() + "\"\n");
+                }
+                tagSb.append("      href=\"" + UrlUtils.escapeXml(entry.getKey().toString()) + "\"\n");
                 tagSb.append("    />\n");
             }
             super.render(url, sb, dateFormat, tagSb.toString());
