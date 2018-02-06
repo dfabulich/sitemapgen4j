@@ -1,10 +1,11 @@
 package com.redfin.sitemapgenerator;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * One configurable Google Link URL. To configure, use {@link Options}
@@ -18,14 +19,14 @@ public class GoogleLinkSitemapUrl extends WebSitemapUrl {
 
     /** Options to configure URLs with alternates */
     public static class Options extends AbstractSitemapUrlOptions<GoogleLinkSitemapUrl, Options> {
-        private final Map<URL, Map<String, String>> alternates;
+        private final Map<URI, Map<String, String>> alternates;
 
-        private static Map<URL, Map<String, String>> convertAlternates(final Map<String, Map<String, String>> alternates)
-            throws MalformedURLException {
+        private static Map<URI, Map<String, String>> convertAlternates(final Map<String, Map<String, String>> alternates)
+                throws URISyntaxException {
 
-            final Map<URL, Map<String, String>> converted = new LinkedHashMap<URL, Map<String, String>>();
-            for (final String key : alternates.keySet()) {
-               converted.put(new URL(key), new LinkedHashMap<String, String>(alternates.get(key)));
+            final Map<URI, Map<String, String>> converted = new LinkedHashMap<URI, Map<String, String>>();
+            for (final Map.Entry<String, Map<String, String>> entry : alternates.entrySet()) {
+               converted.put(new URI(entry.getKey()), new LinkedHashMap<String, String>(entry.getValue()));
             }
             return converted;
         }
@@ -38,7 +39,7 @@ public class GoogleLinkSitemapUrl extends WebSitemapUrl {
          *                   the value is a generic Map&lt;String, String&gt; holding the attributes of
          *                   the link (e.g. hreflang, media, ...)
          */
-        public Options(final String url, final Map<String, Map<String, String>> alternates) throws MalformedURLException {
+        public Options(final String url, final Map<String, Map<String, String>> alternates) throws URISyntaxException, MalformedURLException {
 
             this(new URL(url), convertAlternates(alternates));
         }
@@ -51,13 +52,13 @@ public class GoogleLinkSitemapUrl extends WebSitemapUrl {
          *                   the value is a generic Map&lt;String, String&gt; holding the attributes of
          *                   the link (e.g. hreflang, media, ...)
          */
-        public Options(final URL url, final Map<URL, Map<String, String>> alternates) {
+        public Options(final URL url, final Map<URI, Map<String, String>> alternates) {
             super(url, GoogleLinkSitemapUrl.class);
-            this.alternates = new LinkedHashMap<URL, Map<String, String>>(alternates);
+            this.alternates = new LinkedHashMap<URI, Map<String, String>>(alternates);
         }
     }
 
-    private final Map<URL, Map<String, String>> alternates;
+    private final Map<URI, Map<String, String>> alternates;
 
     /**
      * Constructor specifying the URL and the alternates configurations with Options object
@@ -78,7 +79,7 @@ public class GoogleLinkSitemapUrl extends WebSitemapUrl {
      *                   the value is a generic Map&lt;String, String&gt; holding the attributes of
      *                   the link (e.g. hreflang, media, ...)
      */
-    public GoogleLinkSitemapUrl(final String url, final Map<String, Map<String, String>> alternates) throws MalformedURLException {
+    public GoogleLinkSitemapUrl(final String url, final Map<String, Map<String, String>> alternates) throws URISyntaxException, MalformedURLException {
         this(new Options(url, alternates));
     }
 
@@ -90,11 +91,11 @@ public class GoogleLinkSitemapUrl extends WebSitemapUrl {
      *                   the value is a generic Map&lt;String, String&gt; holding the attributes of
      *                   the link (e.g. hreflang, media, ...)
      */
-    public GoogleLinkSitemapUrl(final URL url, final Map<URL, Map<String, String>> alternates) {
+    public GoogleLinkSitemapUrl(final URL url, final Map<URI, Map<String, String>> alternates) {
         this(new Options(url, alternates));
     }
 
-    public Map<URL, Map<String, String>> getAlternates() {
+    public Map<URI, Map<String, String>> getAlternates() {
 
         return this.alternates;
     }

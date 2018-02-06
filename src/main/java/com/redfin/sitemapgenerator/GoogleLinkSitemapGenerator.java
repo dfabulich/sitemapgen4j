@@ -31,7 +31,7 @@ public class GoogleLinkSitemapGenerator extends SitemapGenerator<GoogleLinkSitem
         public void render(final GoogleLinkSitemapUrl url, final StringBuilder sb, final W3CDateFormat dateFormat) {
 
             final StringBuilder tagSb = new StringBuilder();
-            for (final Entry<URL, Map<String, String>> entry : url.getAlternates().entrySet()) {
+            for (final Entry<URI, Map<String, String>> entry : url.getAlternates().entrySet()) {
                 tagSb.append("    <xhtml:link\n");
                 tagSb.append("      rel=\"alternate\"\n");
                 for(final Entry<String, String> innerEntry : entry.getValue().entrySet()){
