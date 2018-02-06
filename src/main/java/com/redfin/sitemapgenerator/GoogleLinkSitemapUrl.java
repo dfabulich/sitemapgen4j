@@ -23,9 +23,9 @@ public class GoogleLinkSitemapUrl extends WebSitemapUrl {
         private static Map<URL, Map<String, String>> convertAlternates(final Map<String, Map<String, String>> alternates)
             throws MalformedURLException {
 
-            final Map<URL, Map<String, String>> converted = new LinkedHashMap<URL, Map<String, String>>(alternates.size());
-            for (final Entry<String, Map<String, String>> entry : alternates.entrySet()) {
-               converted.put(new URL(entry.getKey()), entry.getValue());
+            final Map<URL, Map<String, String>> converted = new LinkedHashMap<URL, Map<String, String>>();
+            for (final String key : alternates.keySet()) {
+               converted.put(new URL(key), new LinkedHashMap<String, String>(alternates.get(key)));
             }
             return converted;
         }
