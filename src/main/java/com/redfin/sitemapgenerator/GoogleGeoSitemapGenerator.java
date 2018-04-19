@@ -84,7 +84,10 @@ public class GoogleGeoSitemapGenerator extends SitemapGenerator<GoogleGeoSitemap
 		}
 
 		public String getXmlNamespaces() {
-			return "xmlns:geo=\"http://www.google.com/geo/schemas/sitemap/1.0\"";
+			return "xmlns:geo=\"http://www.google.com/geo/schemas/sitemap/1.0\"" + "    xsi:schemaLocation=\"http://www.sitemaps.org/schemas/sitemap/0.9\n" +
+					"    http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd\n" +
+					"    http://www.w3.org/1999/xhtml\n" +
+					"    http://www.w3.org/2002/08/xhtml/xhtml1-strict.xsd\">";
 		}
 
 		public void render(GoogleGeoSitemapUrl url, StringBuilder sb, W3CDateFormat dateFormat) {
