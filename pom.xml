@@ -1,12 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.github.dfabulich</groupId>
+    <groupId>com.github.TomWalbers</groupId>
   <artifactId>sitemapgen4j</artifactId>
   <packaging>jar</packaging>
   <version>1.0.7-SNAPSHOT</version>
   <name>SitemapGen4J</name>
-  <url>https://github.com/dfabulich/sitemapgen4j/</url>
+  <url>https://github.com/TomWalbers/sitemapgen4j/</url>
   <description>SitemapGen4j is an XML sitemap generator written in Java.</description>
   <licenses>
     <license>
@@ -16,9 +16,9 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:git:git://github.com:dfabulich/sitemapgen4j.git</connection>
-    <developerConnection>scm:git:git@github.com:dfabulich/sitemapgen4j.git</developerConnection>
-    <url>https://github.com/dfabulich/sitemapgen4j/</url>
+    <connection>scm:git:git://github.com:TomWalbers/sitemapgen4j.git</connection>
+    <developerConnection>scm:git:git@github.com:TomWalbers/sitemapgen4j.git</developerConnection>
+    <url>https://github.com/TomWalbers/sitemapgen4j/</url>
   </scm>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
