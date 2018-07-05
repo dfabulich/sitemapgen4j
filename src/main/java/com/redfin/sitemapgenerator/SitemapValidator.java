@@ -45,12 +45,14 @@ public class SitemapValidator {
 			if (stream == null) throw new RuntimeException("BUG Couldn't load sitemap.xsd");
 			StreamSource source = new StreamSource(stream);
 			sitemapSchema = factory.newSchema(source);
+			stream.close();
 			
 			stream = SitemapValidator.class.getResourceAsStream("siteindex.xsd");
 			if (stream == null) throw new RuntimeException("BUG Couldn't load siteindex.xsd");
 			source = new StreamSource(stream);
 			sitemapIndexSchema = factory.newSchema(source);
-		} catch (SAXException e) {
+			stream.close();
+		} catch (Exception e) {
 			throw new RuntimeException("BUG", e);
 		}
 	}
@@ -73,6 +75,7 @@ public class SitemapValidator {
 			FileReader reader = new FileReader(sitemap);
 			SAXSource source = new SAXSource(new InputSource(reader));
 			validator.validate(source);
+			reader.close();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
