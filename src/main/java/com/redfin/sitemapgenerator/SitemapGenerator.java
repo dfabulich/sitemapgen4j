@@ -212,10 +212,10 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * After you've called {@link #write()}, call this to generate a sitemap index of all sitemaps you generated.
 	 * The sitemap index is written to {baseDir}/sitemap_index.xml
 	 */
-	public void writeSitemapsWithIndex() {
+	public File writeSitemapsWithIndex() {
 		if (!finished) throw new RuntimeException("Sitemaps not generated yet; call write() first");
 		File outFile = new File(baseDir, "sitemap_index.xml");
-		writeSitemapsWithIndex(outFile);
+		return writeSitemapsWithIndex(outFile);
 	}
 
 	/**
@@ -223,11 +223,12 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 *
 	 * @param outFile the destination file of the sitemap index.
 	 */
-	public void writeSitemapsWithIndex(File outFile) {
+	public File writeSitemapsWithIndex(File outFile) {
 		if (!finished) throw new RuntimeException("Sitemaps not generated yet; call write() first");
 		SitemapIndexGenerator sig;
 		sig = new SitemapIndexGenerator.Options(baseUrl, outFile).dateFormat(dateFormat).autoValidate(autoValidate).build();
 		sig.addUrls(fileNamePrefix, fileNameSuffix, mapCount).write();
+		return outFile;
 	}
 	
 	private void writeSiteMap() {
