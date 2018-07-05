@@ -17,86 +17,86 @@ import java.util.Map;
  */
 public class GoogleLinkSitemapUrl extends WebSitemapUrl {
 
-    /** Options to configure URLs with alternates */
-    public static class Options extends AbstractSitemapUrlOptions<GoogleLinkSitemapUrl, Options> {
-        private final Map<URI, Map<String, String>> alternates;
+	/** Options to configure URLs with alternates */
+	public static class Options extends AbstractSitemapUrlOptions<GoogleLinkSitemapUrl, Options> {
+		private final Map<URI, Map<String, String>> alternates;
 
-        private static Map<URI, Map<String, String>> convertAlternates(final Map<String, Map<String, String>> alternates)
-                throws URISyntaxException {
+		private static Map<URI, Map<String, String>> convertAlternates(final Map<String, Map<String, String>> alternates)
+				throws URISyntaxException {
 
-            final Map<URI, Map<String, String>> converted = new LinkedHashMap<URI, Map<String, String>>();
-            for (final Map.Entry<String, Map<String, String>> entry : alternates.entrySet()) {
-               converted.put(new URI(entry.getKey()), new LinkedHashMap<String, String>(entry.getValue()));
-            }
-            return converted;
-        }
+			final Map<URI, Map<String, String>> converted = new LinkedHashMap<URI, Map<String, String>>();
+			for (final Map.Entry<String, Map<String, String>> entry : alternates.entrySet()) {
+				converted.put(new URI(entry.getKey()), new LinkedHashMap<String, String>(entry.getValue()));
+			}
+			return converted;
+		}
 
-        /**
-         * Options constructor with the alternates configurations
-         *
-         * @param url Base URL into which we will be adding alternates
-         * @param alternates Map&lt;String, Map&lt;String, String&gt;&gt; where the key is the href and
-         *                   the value is a generic Map&lt;String, String&gt; holding the attributes of
-         *                   the link (e.g. hreflang, media, ...)
-         */
-        public Options(final String url, final Map<String, Map<String, String>> alternates) throws URISyntaxException, MalformedURLException {
+		/**
+		 * Options constructor with the alternates configurations
+		 *
+		 * @param url Base URL into which we will be adding alternates
+		 * @param alternates Map&lt;String, Map&lt;String, String&gt;&gt; where the key is the href and
+		 *					the value is a generic Map&lt;String, String&gt; holding the attributes of
+		 *					the link (e.g. hreflang, media, ...)
+		 */
+		public Options(final String url, final Map<String, Map<String, String>> alternates) throws URISyntaxException, MalformedURLException {
 
-            this(new URL(url), convertAlternates(alternates));
-        }
+			this(new URL(url), convertAlternates(alternates));
+		}
 
-        /**
-         * Options constructor with the alternates configurations
-         *
-         * @param url Base URL into which we will be adding alternates
-         * @param alternates Map&lt;URL, Map&lt;String, String&gt;&gt; where the key is the href and
-         *                   the value is a generic Map&lt;String, String&gt; holding the attributes of
-         *                   the link (e.g. hreflang, media, ...)
-         */
-        public Options(final URL url, final Map<URI, Map<String, String>> alternates) {
-            super(url, GoogleLinkSitemapUrl.class);
-            this.alternates = new LinkedHashMap<URI, Map<String, String>>(alternates);
-        }
-    }
+		/**
+		 * Options constructor with the alternates configurations
+		 *
+		 * @param url Base URL into which we will be adding alternates
+		 * @param alternates Map&lt;URL, Map&lt;String, String&gt;&gt; where the key is the href and
+		 *					the value is a generic Map&lt;String, String&gt; holding the attributes of
+		 *					the link (e.g. hreflang, media, ...)
+		 */
+		public Options(final URL url, final Map<URI, Map<String, String>> alternates) {
+			super(url, GoogleLinkSitemapUrl.class);
+			this.alternates = new LinkedHashMap<URI, Map<String, String>>(alternates);
+		}
+	}
 
-    private final Map<URI, Map<String, String>> alternates;
+	private final Map<URI, Map<String, String>> alternates;
 
-    /**
-     * Constructor specifying the URL and the alternates configurations with Options object
-     *
-     * @param options Configuration object to initialize the GoogleLinkSitemapUrl with.
-     * @see Options#Options(java.lang.String, java.util.Map)
-     */
-    public GoogleLinkSitemapUrl(final Options options) {
-        super(options);
-        alternates = options.alternates;
-    }
+	/**
+	 * Constructor specifying the URL and the alternates configurations with Options object
+	 *
+	 * @param options Configuration object to initialize the GoogleLinkSitemapUrl with.
+	 * @see Options#Options(java.lang.String, java.util.Map)
+	 */
+	public GoogleLinkSitemapUrl(final Options options) {
+		super(options);
+		alternates = options.alternates;
+	}
 
-    /**
-     * Constructor specifying the URL as a String and the alternates configurations
-     *
-     * @param url Base URL into which we will be adding alternates
-     * @param alternates Map&lt;String, Map&lt;String, String&gt;&gt; where the key is the href and
-     *                   the value is a generic Map&lt;String, String&gt; holding the attributes of
-     *                   the link (e.g. hreflang, media, ...)
-     */
-    public GoogleLinkSitemapUrl(final String url, final Map<String, Map<String, String>> alternates) throws URISyntaxException, MalformedURLException {
-        this(new Options(url, alternates));
-    }
+	/**
+	 * Constructor specifying the URL as a String and the alternates configurations
+	 *
+	 * @param url Base URL into which we will be adding alternates
+	 * @param alternates Map&lt;String, Map&lt;String, String&gt;&gt; where the key is the href and
+	 *					the value is a generic Map&lt;String, String&gt; holding the attributes of
+	 *					the link (e.g. hreflang, media, ...)
+	 */
+	public GoogleLinkSitemapUrl(final String url, final Map<String, Map<String, String>> alternates) throws URISyntaxException, MalformedURLException {
+		this(new Options(url, alternates));
+	}
 
-    /**
-     * Constructor specifying the URL as a URL and the alternates configurations
-     *
-     * @param url Base URL into which we will be adding alternates
-     * @param alternates Map&lt;String, Map&lt;String, String&gt;&gt; where the key is the href and
-     *                   the value is a generic Map&lt;String, String&gt; holding the attributes of
-     *                   the link (e.g. hreflang, media, ...)
-     */
-    public GoogleLinkSitemapUrl(final URL url, final Map<URI, Map<String, String>> alternates) {
-        this(new Options(url, alternates));
-    }
+	/**
+	 * Constructor specifying the URL as a URL and the alternates configurations
+	 *
+	 * @param url Base URL into which we will be adding alternates
+	 * @param alternates Map&lt;String, Map&lt;String, String&gt;&gt; where the key is the href and
+	 *					the value is a generic Map&lt;String, String&gt; holding the attributes of
+	 *					the link (e.g. hreflang, media, ...)
+	 */
+	public GoogleLinkSitemapUrl(final URL url, final Map<URI, Map<String, String>> alternates) {
+		this(new Options(url, alternates));
+	}
 
-    public Map<URI, Map<String, String>> getAlternates() {
+	public Map<URI, Map<String, String>> getAlternates() {
 
-        return this.alternates;
-    }
+		return this.alternates;
+	}
 }
