@@ -228,6 +228,8 @@ public class SitemapIndexGenerator {
                 // TODO gzip? is that legal for a sitemap index?
                 out = new FileWriter(outFile);
                 writeSiteMap(out);
+                out.flush();
+
                 if (autoValidate) SitemapValidator.validateSitemapIndex(outFile);
             } catch (IOException e) {
                 throw new RuntimeException("Problem writing sitemap index file " + outFile, e);

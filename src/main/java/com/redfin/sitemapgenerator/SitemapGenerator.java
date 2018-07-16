@@ -260,8 +260,10 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 			} else {
 				out = new OutputStreamWriter(new FileOutputStream(outFile), Charset.forName("UTF-8").newEncoder());
 			}
-			
+
 			writeSiteMap(out);
+			out.flush();
+
 			if (autoValidate) SitemapValidator.validateWebSitemap(outFile);
 		} catch (IOException e) {
 			throw new RuntimeException("Problem writing sitemap file " + outFile, e);
