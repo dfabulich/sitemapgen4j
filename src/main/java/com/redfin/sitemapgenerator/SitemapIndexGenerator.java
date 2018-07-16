@@ -1,15 +1,12 @@
 package com.redfin.sitemapgenerator;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import org.xml.sax.SAXException;
+
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
-
-import org.xml.sax.SAXException;
 
 /**
  * Builds a sitemap index, which points only to other sitemaps.
@@ -224,7 +221,7 @@ public class SitemapIndexGenerator {
 		if (!allowEmptyIndex && urls.isEmpty()) throw new RuntimeException("No URLs added, sitemap index would be empty; you must add some URLs with addUrls");
 		try {
 			// TODO gzip? is that legal for a sitemap index?
-			FileWriter out = new FileWriter(outFile);
+			BufferedWriter out = new BufferedWriter(new FileWriter(outFile));
 			writeSiteMap(out);
 			if (autoValidate) SitemapValidator.validateSitemapIndex(outFile);
 		} catch (IOException e) {
@@ -234,7 +231,7 @@ public class SitemapIndexGenerator {
 		}
 	}
 	
-	private void writeSiteMap(OutputStreamWriter out) throws IOException {
+	private void writeSiteMap(BufferedWriter out) throws IOException {
 		out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"); 
 		out.write("<sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n");
 		for (SitemapIndexUrl url : urls) {
@@ -254,7 +251,6 @@ public class SitemapIndexGenerator {
 			out.write("  </sitemap>\n");
 		}
 		out.write("</sitemapindex>");
-		out.close();
 	}
 
 }
