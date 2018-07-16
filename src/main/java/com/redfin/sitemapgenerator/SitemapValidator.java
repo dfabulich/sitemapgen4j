@@ -1,9 +1,7 @@
 package com.redfin.sitemapgenerator;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
 import javax.xml.transform.sax.SAXSource;
@@ -11,9 +9,7 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
+import java.io.*;
 
 /** Validates sitemaps and sitemap indexes
  * 
@@ -72,10 +68,9 @@ public class SitemapValidator {
 	private static void validateXml(File sitemap, Schema schema) throws SAXException {
 		Validator validator = schema.newValidator();
 		try {
-			FileReader reader = new FileReader(sitemap);
+			BufferedReader reader = new BufferedReader(new FileReader(sitemap));
 			SAXSource source = new SAXSource(new InputSource(reader));
 			validator.validate(source);
-			reader.close();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
