@@ -1,17 +1,16 @@
 package com.redfin.sitemapgenerator;
 
+import org.xml.sax.SAXException;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPOutputStream;
-
-import org.xml.sax.SAXException;
 
 abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGenerator<U,THIS>> {
 	/** 50000 URLs per sitemap maximum */
@@ -61,8 +60,9 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * or else write out one sitemap immediately.
 	 * @param url the URL to add to this sitemap
 	 * @return this
+     * @throws IOException when closing of streams has failed
 	 */
-	public THIS addUrl(U url) {
+	public THIS addUrl(U url) throws IOException {
 		if (finished) throw new RuntimeException("Sitemap already printed; you must create a new generator to make more sitemaps"); 
 		UrlUtils.checkUrl(url.getUrl(), baseUrl);
 		if (urls.size() == maxUrls) {
@@ -83,8 +83,21 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * or write out one sitemap immediately.
 	 * @param urls the URLs to add to this sitemap
 	 * @return this
+     * @throws IOException when closing of streams has failed.
 	 */
-	public THIS addUrls(Iterable<? extends U> urls) {
+	public THIS addUrls(Iterable<? extends U> urls) throws IOException {
+		for (U url : urls) addUrl(url);
+		return getThis();
+	}
+	
+	/** Add multiple URLs of the appropriate type to this sitemap, one at a time.
+	 * If we have reached the maximum number of URLs, we'll throw an exception if {@link #allowMultipleSitemaps} is false,
+	 * or write out one sitemap immediately.
+	 * @param urls the URLs to add to this sitemap
+	 * @return this
+     * @throws IOException when closing of streams has failed.
+	 */
+	public THIS addUrls(U... urls) throws IOException {
 		for (U url : urls) addUrl(url);
 		return getThis();
 	}
@@ -95,19 +108,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * @param urls the URLs to add to this sitemap
 	 * @return this
 	 */
-	public THIS addUrls(U... urls) {
-		for (U url : urls) addUrl(url);
-		return getThis();
-	}
-	
-	/** Add multiple URLs of the appropriate type to this sitemap, one at a time.
-	 * If we have reached the maximum number of URLs, we'll throw an exception if {@link #allowMultipleSitemaps} is false,
-	 * or write out one sitemap immediately.
-	 * @param urls the URLs to add to this sitemap
-	 * @return this
-	 * @throws MalformedURLException
-	 */
-	public THIS addUrls(String... urls) throws MalformedURLException {
+	public THIS addUrls(String... urls) {
 		for (String url : urls) addUrl(url);
 		return getThis();
 	}
@@ -117,16 +118,15 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * or else write out one sitemap immediately.
 	 * @param url the URL to add to this sitemap
 	 * @return this
-	 * @throws MalformedURLException
 	 */
-	public THIS addUrl(String url) throws MalformedURLException {
+	public THIS addUrl(String url) {
 		U sitemapUrl;
 		try {
 			sitemapUrl = renderer.getUrlClass().getConstructor(String.class).newInstance(url);
-		} catch (Exception e) {
+            return addUrl(sitemapUrl);
+        } catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		return addUrl(sitemapUrl);
 	}
 	
 	/** Add multiple URLs of the appropriate type to this sitemap, one at a time.
@@ -150,10 +150,10 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 		U sitemapUrl;
 		try {
 			sitemapUrl = renderer.getUrlClass().getConstructor(URL.class).newInstance(url);
-		} catch (Exception e) {
+            return addUrl(sitemapUrl);
+        } catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		return addUrl(sitemapUrl);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -168,7 +168,11 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	public List<File> write() {
 		if (finished) throw new RuntimeException("Sitemap already printed; you must create a new generator to make more sitemaps");
 		if (!allowEmptySitemap && urls.isEmpty() && mapCount == 0) throw new RuntimeException("No URLs added, sitemap would be empty; you must add some URLs with addUrls");
-		writeSiteMap();
+		try {
+            writeSiteMap();
+        } catch (IOException ex) {
+		    throw new RuntimeException("Closing of streams has failed at some point.", ex);
+        }
 		finished = true;
 		return outFiles;
 	}
@@ -211,8 +215,9 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	/**
 	 * After you've called {@link #write()}, call this to generate a sitemap index of all sitemaps you generated.
 	 * The sitemap index is written to {baseDir}/sitemap_index.xml
+     * @throws IOException when closing of streams has failed
 	 */
-	public File writeSitemapsWithIndex() {
+	public File writeSitemapsWithIndex() throws IOException {
 		if (!finished) throw new RuntimeException("Sitemaps not generated yet; call write() first");
 		File outFile = new File(baseDir, "sitemap_index.xml");
 		return writeSitemapsWithIndex(outFile);
@@ -222,8 +227,9 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * After you've called {@link #write()}, call this to generate a sitemap index of all sitemaps you generated.
 	 *
 	 * @param outFile the destination file of the sitemap index.
+     * @throws IOException when closing of streams has failed
 	 */
-	public File writeSitemapsWithIndex(File outFile) {
+	public File writeSitemapsWithIndex(File outFile) throws IOException {
 		if (!finished) throw new RuntimeException("Sitemaps not generated yet; call write() first");
 		SitemapIndexGenerator sig;
 		sig = new SitemapIndexGenerator.Options(baseUrl, outFile).dateFormat(dateFormat).autoValidate(autoValidate).build();
@@ -231,7 +237,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 		return outFile;
 	}
 	
-	private void writeSiteMap() {
+	private void writeSiteMap() throws IOException {
 		if (baseDir == null) {
 			throw new NullPointerException("To write to files, baseDir must not be null");
 		}
@@ -244,8 +250,9 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 		}
 		File outFile = new File(baseDir, fileNamePrefix+fileNameSuffix);
 		outFiles.add(outFile);
-		try {
-			OutputStreamWriter out;
+
+        OutputStreamWriter out = null;
+        try {
 			if (gzip) {
 				FileOutputStream fileStream = new FileOutputStream(outFile);
 				GZIPOutputStream gzipStream = new GZIPOutputStream(fileStream);
@@ -260,14 +267,17 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 			throw new RuntimeException("Problem writing sitemap file " + outFile, e);
 		} catch (SAXException e) {
 			throw new RuntimeException("Sitemap file failed to validate (bug?)", e);
-		}
+		} finally {
+            if(out != null) {
+                out.close();
+            }
+        }
 	}
 	
 	private void writeSiteMap(OutputStreamWriter out) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		writeSiteMapAsString(sb, urls);
 		out.write(sb.toString());
-		out.close();
 	}
 	
 }
