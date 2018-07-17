@@ -64,31 +64,36 @@ public class SitemapValidator {
 	}
 	
 	/** Validates an ordinary web sitemap file (NOT a Google-specific sitemap) */
-	public static void validateWebSitemap(File sitemap) throws SAXException, IOException {
+	public static void validateWebSitemap(File sitemap) throws SAXException {
 		lazyLoad();
 		validateXml(sitemap, sitemapSchema);
 	}
 	
 	/** Validates a sitemap index file  */
-	public static void validateSitemapIndex(File sitemap) throws SAXException, IOException {
+	public static void validateSitemapIndex(File sitemap) throws SAXException {
 		lazyLoad();
 		validateXml(sitemap, sitemapIndexSchema);
 	}
 
-	private static void validateXml(File sitemap, Schema schema) throws SAXException, IOException {
-		Validator validator = schema.newValidator();
-		FileReader reader = null;
+	private static void validateXml(File sitemap, Schema schema) throws SAXException {
 		try {
-			reader = new FileReader(sitemap);
-			SAXSource source = new SAXSource(new InputSource(reader));
-			validator.validate(source);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		} finally {
-			if(reader != null) {
-				reader.close();
+			Validator validator = schema.newValidator();
+			FileReader reader = null;
+			try {
+				reader = new FileReader(sitemap);
+				SAXSource source = new SAXSource(new InputSource(reader));
+				validator.validate(source);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			} finally {
+				if(reader != null) {
+					reader.close();
+				}
 			}
+		} catch (IOException ex) {
+			throw new RuntimeException("Unable to close stream.", ex);
 		}
+
 	}
 
 }

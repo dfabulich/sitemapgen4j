@@ -60,16 +60,19 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * or else write out one sitemap immediately.
 	 * @param url the URL to add to this sitemap
 	 * @return this
-	 * @throws IOException when closing of streams has failed
 	 */
-	public THIS addUrl(U url) throws IOException {
+	public THIS addUrl(U url) {
 		if (finished) throw new RuntimeException("Sitemap already printed; you must create a new generator to make more sitemaps"); 
 		UrlUtils.checkUrl(url.getUrl(), baseUrl);
 		if (urls.size() == maxUrls) {
 			if (!allowMultipleSitemaps) throw new RuntimeException("More than " + maxUrls + " urls, but allowMultipleSitemaps is false.  Enable allowMultipleSitemaps to split the sitemap into multiple files with a sitemap index.");
 			if (baseDir != null) {
 				if (mapCount == 0) mapCount++;
-				writeSiteMap();
+				try {
+					writeSiteMap();
+				} catch(IOException ex) {
+					throw new RuntimeException("Closing of stream failed.", ex);
+				}
 				mapCount++;
 				urls.clear();
 			}
@@ -83,9 +86,8 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * or write out one sitemap immediately.
 	 * @param urls the URLs to add to this sitemap
 	 * @return this
-	 * @throws IOException when closing of streams has failed.
 	 */
-	public THIS addUrls(Iterable<? extends U> urls) throws IOException {
+	public THIS addUrls(Iterable<? extends U> urls) {
 		for (U url : urls) addUrl(url);
 		return getThis();
 	}
@@ -95,9 +97,8 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * or write out one sitemap immediately.
 	 * @param urls the URLs to add to this sitemap
 	 * @return this
-	 * @throws IOException when closing of streams has failed.
 	 */
-	public THIS addUrls(U... urls) throws IOException {
+	public THIS addUrls(U... urls) {
 		for (U url : urls) addUrl(url);
 		return getThis();
 	}
@@ -215,9 +216,8 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	/**
 	 * After you've called {@link #write()}, call this to generate a sitemap index of all sitemaps you generated.
 	 * The sitemap index is written to {baseDir}/sitemap_index.xml
-	 * @throws IOException when closing of streams has failed
 	 */
-	public File writeSitemapsWithIndex() throws IOException {
+	public File writeSitemapsWithIndex() {
 		if (!finished) throw new RuntimeException("Sitemaps not generated yet; call write() first");
 		File outFile = new File(baseDir, "sitemap_index.xml");
 		return writeSitemapsWithIndex(outFile);
@@ -227,9 +227,8 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * After you've called {@link #write()}, call this to generate a sitemap index of all sitemaps you generated.
 	 *
 	 * @param outFile the destination file of the sitemap index.
-	 * @throws IOException when closing of streams has failed
 	 */
-	public File writeSitemapsWithIndex(File outFile) throws IOException {
+	public File writeSitemapsWithIndex(File outFile) {
 		if (!finished) throw new RuntimeException("Sitemaps not generated yet; call write() first");
 		SitemapIndexGenerator sig;
 		sig = new SitemapIndexGenerator.Options(baseUrl, outFile).dateFormat(dateFormat).autoValidate(autoValidate).build();
