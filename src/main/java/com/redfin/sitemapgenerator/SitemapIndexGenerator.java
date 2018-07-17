@@ -1,5 +1,7 @@
 package com.redfin.sitemapgenerator;
 
+import org.xml.sax.SAXException;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -8,8 +10,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
-
-import org.xml.sax.SAXException;
 
 /**
  * Builds a sitemap index, which points only to other sitemaps.
@@ -223,15 +223,27 @@ public class SitemapIndexGenerator {
 	public void write() {
 		if (!allowEmptyIndex && urls.isEmpty()) throw new RuntimeException("No URLs added, sitemap index would be empty; you must add some URLs with addUrls");
 		try {
-			// TODO gzip? is that legal for a sitemap index?
-			FileWriter out = new FileWriter(outFile);
-			writeSiteMap(out);
-			if (autoValidate) SitemapValidator.validateSitemapIndex(outFile);
-		} catch (IOException e) {
-			throw new RuntimeException("Problem writing sitemap index file " + outFile, e);
-		} catch (SAXException e) {
-			throw new RuntimeException("Problem validating sitemap index file (bug?)", e);
+			FileWriter out = null;
+			try {
+				// TODO gzip? is that legal for a sitemap index?
+				out = new FileWriter(outFile);
+				writeSiteMap(out);
+				out.flush();
+
+				if (autoValidate) SitemapValidator.validateSitemapIndex(outFile);
+			} catch (IOException e) {
+				throw new RuntimeException("Problem writing sitemap index file " + outFile, e);
+			} catch (SAXException e) {
+				throw new RuntimeException("Problem validating sitemap index file (bug?)", e);
+			} finally {
+				if(out != null) {
+					out.close();
+				}
+			}
+		} catch (IOException ex) {
+			throw new RuntimeException("Closing of stream has failed.", ex);
 		}
+
 	}
 	
 	private void writeSiteMap(OutputStreamWriter out) throws IOException {
@@ -254,7 +266,6 @@ public class SitemapIndexGenerator {
 			out.write("  </sitemap>\n");
 		}
 		out.write("</sitemapindex>");
-		out.close();
 	}
 
 }

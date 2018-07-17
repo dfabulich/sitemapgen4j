@@ -1,17 +1,16 @@
 package com.redfin.sitemapgenerator;
 
+import org.xml.sax.SAXException;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPOutputStream;
-
-import org.xml.sax.SAXException;
 
 abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGenerator<U,THIS>> {
 	/** 50000 URLs per sitemap maximum */
@@ -69,7 +68,11 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 			if (!allowMultipleSitemaps) throw new RuntimeException("More than " + maxUrls + " urls, but allowMultipleSitemaps is false.  Enable allowMultipleSitemaps to split the sitemap into multiple files with a sitemap index.");
 			if (baseDir != null) {
 				if (mapCount == 0) mapCount++;
-				writeSiteMap();
+				try {
+					writeSiteMap();
+				} catch(IOException ex) {
+					throw new RuntimeException("Closing of stream failed.", ex);
+				}
 				mapCount++;
 				urls.clear();
 			}
@@ -105,9 +108,8 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * or write out one sitemap immediately.
 	 * @param urls the URLs to add to this sitemap
 	 * @return this
-	 * @throws MalformedURLException
 	 */
-	public THIS addUrls(String... urls) throws MalformedURLException {
+	public THIS addUrls(String... urls) {
 		for (String url : urls) addUrl(url);
 		return getThis();
 	}
@@ -117,16 +119,15 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	 * or else write out one sitemap immediately.
 	 * @param url the URL to add to this sitemap
 	 * @return this
-	 * @throws MalformedURLException
 	 */
-	public THIS addUrl(String url) throws MalformedURLException {
+	public THIS addUrl(String url) {
 		U sitemapUrl;
 		try {
 			sitemapUrl = renderer.getUrlClass().getConstructor(String.class).newInstance(url);
+			return addUrl(sitemapUrl);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		return addUrl(sitemapUrl);
 	}
 	
 	/** Add multiple URLs of the appropriate type to this sitemap, one at a time.
@@ -150,10 +151,10 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 		U sitemapUrl;
 		try {
 			sitemapUrl = renderer.getUrlClass().getConstructor(URL.class).newInstance(url);
+			return addUrl(sitemapUrl);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		return addUrl(sitemapUrl);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -168,7 +169,11 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 	public List<File> write() {
 		if (finished) throw new RuntimeException("Sitemap already printed; you must create a new generator to make more sitemaps");
 		if (!allowEmptySitemap && urls.isEmpty() && mapCount == 0) throw new RuntimeException("No URLs added, sitemap would be empty; you must add some URLs with addUrls");
-		writeSiteMap();
+		try {
+			writeSiteMap();
+		} catch (IOException ex) {
+			throw new RuntimeException("Closing of streams has failed at some point.", ex);
+		}
 		finished = true;
 		return outFiles;
 	}
@@ -231,7 +236,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 		return outFile;
 	}
 	
-	private void writeSiteMap() {
+	private void writeSiteMap() throws IOException {
 		if (baseDir == null) {
 			throw new NullPointerException("To write to files, baseDir must not be null");
 		}
@@ -244,8 +249,9 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 		}
 		File outFile = new File(baseDir, fileNamePrefix+fileNameSuffix);
 		outFiles.add(outFile);
+
+		OutputStreamWriter out = null;
 		try {
-			OutputStreamWriter out;
 			if (gzip) {
 				FileOutputStream fileStream = new FileOutputStream(outFile);
 				GZIPOutputStream gzipStream = new GZIPOutputStream(fileStream);
@@ -253,13 +259,19 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 			} else {
 				out = new OutputStreamWriter(new FileOutputStream(outFile), Charset.forName("UTF-8").newEncoder());
 			}
-			
+
 			writeSiteMap(out);
+			out.flush();
+
 			if (autoValidate) SitemapValidator.validateWebSitemap(outFile);
 		} catch (IOException e) {
 			throw new RuntimeException("Problem writing sitemap file " + outFile, e);
 		} catch (SAXException e) {
 			throw new RuntimeException("Sitemap file failed to validate (bug?)", e);
+		} finally {
+			if(out != null) {
+				out.close();
+			}
 		}
 	}
 	
@@ -267,7 +279,6 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 		StringBuilder sb = new StringBuilder();
 		writeSiteMapAsString(sb, urls);
 		out.write(sb.toString());
-		out.close();
 	}
 	
 }
