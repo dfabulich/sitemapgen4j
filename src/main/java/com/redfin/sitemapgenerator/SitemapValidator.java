@@ -38,7 +38,7 @@ public class SitemapValidator {
 	private synchronized static void lazyLoad() {
 		if (sitemapSchema != null)  return;
 		SchemaFactory factory =
-            SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+			SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 		try {
 			sitemapSchema = lazyLoad(factory, "sitemap.xsd");
 			sitemapIndexSchema = lazyLoad(factory, "siteindex.xsd");
@@ -48,20 +48,20 @@ public class SitemapValidator {
 	}
 
 	private synchronized static Schema lazyLoad(SchemaFactory factory, String resource) throws IOException, SAXException {
-	    InputStream stream = null;
+		InputStream stream = null;
 
-        try {
-            stream = SitemapValidator.class.getResourceAsStream(resource);
-            if (stream == null) throw new RuntimeException("BUG Couldn't load " + resource);
-            StreamSource source = new StreamSource(stream);
-            return factory.newSchema(source);
-        } finally {
-            if(stream != null) {
-                stream.close();
-            }
-        }
+		try {
+			stream = SitemapValidator.class.getResourceAsStream(resource);
+			if (stream == null) throw new RuntimeException("BUG Couldn't load " + resource);
+			StreamSource source = new StreamSource(stream);
+			return factory.newSchema(source);
+		} finally {
+			if(stream != null) {
+				stream.close();
+			}
+		}
 
-    }
+	}
 	
 	/** Validates an ordinary web sitemap file (NOT a Google-specific sitemap) */
 	public static void validateWebSitemap(File sitemap) throws SAXException, IOException {
@@ -77,7 +77,7 @@ public class SitemapValidator {
 
 	private static void validateXml(File sitemap, Schema schema) throws SAXException, IOException {
 		Validator validator = schema.newValidator();
-        FileReader reader = null;
+		FileReader reader = null;
 		try {
 			reader = new FileReader(sitemap);
 			SAXSource source = new SAXSource(new InputSource(reader));
@@ -85,10 +85,10 @@ public class SitemapValidator {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		} finally {
-		    if(reader != null) {
-		        reader.close();
-            }
-        }
+			if(reader != null) {
+				reader.close();
+			}
+		}
 	}
 
 }

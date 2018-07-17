@@ -222,27 +222,27 @@ public class SitemapIndexGenerator {
 	/** Writes out the sitemap index */
 	public void write() {
 		if (!allowEmptyIndex && urls.isEmpty()) throw new RuntimeException("No URLs added, sitemap index would be empty; you must add some URLs with addUrls");
-        try {
-            FileWriter out = null;
-            try {
-                // TODO gzip? is that legal for a sitemap index?
-                out = new FileWriter(outFile);
-                writeSiteMap(out);
-                out.flush();
+		try {
+			FileWriter out = null;
+			try {
+				// TODO gzip? is that legal for a sitemap index?
+				out = new FileWriter(outFile);
+				writeSiteMap(out);
+				out.flush();
 
-                if (autoValidate) SitemapValidator.validateSitemapIndex(outFile);
-            } catch (IOException e) {
-                throw new RuntimeException("Problem writing sitemap index file " + outFile, e);
-            } catch (SAXException e) {
-                throw new RuntimeException("Problem validating sitemap index file (bug?)", e);
-            } finally {
-                if(out != null) {
-                    out.close();
-                }
-            }
-        } catch (IOException ex) {
-            throw new RuntimeException("Closing of stream has failed.", ex);
-        }
+				if (autoValidate) SitemapValidator.validateSitemapIndex(outFile);
+			} catch (IOException e) {
+				throw new RuntimeException("Problem writing sitemap index file " + outFile, e);
+			} catch (SAXException e) {
+				throw new RuntimeException("Problem validating sitemap index file (bug?)", e);
+			} finally {
+				if(out != null) {
+					out.close();
+				}
+			}
+		} catch (IOException ex) {
+			throw new RuntimeException("Closing of stream has failed.", ex);
+		}
 
 	}
 	
