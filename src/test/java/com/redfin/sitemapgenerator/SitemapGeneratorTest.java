@@ -155,19 +155,6 @@ public class SitemapGeneratorTest extends TestCase {
 		assertEquals(expected, sitemap);
 	}
 
-	public void testUrlWithImages() throws Exception {
-		W3CDateFormat df = new W3CDateFormat();
-		df.setTimeZone(W3CDateFormat.ZULU);
-		wsg = WebSitemapGenerator.builder("http://www.example.com", dir).dateFormat(df).autoValidate(true).build();
-
-		WebSitemapUrl url = new WebSitemapUrl.Options("http://www.example.com")
-				.build();
-		wsg.addUrl(url);
-
-		String sitemap = writeSingleSiteMap(wsg);
-		System.out.println(sitemap);
-	}
-
 	public void testBadUrl() throws Exception {
 		wsg = new WebSitemapGenerator("http://www.example.com", dir);
 		try {
