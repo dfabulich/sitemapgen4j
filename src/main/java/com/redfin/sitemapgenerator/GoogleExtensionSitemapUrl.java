@@ -8,8 +8,6 @@ import java.util.List;
 
 /** Configurable sitemap url with support for Google extensions
  * @see <a href="https://support.google.com/webmasters/answer/183668">Manage your sitemaps</a>
- *
- * TODO Add support for video tags and news tags
  */
 public class GoogleExtensionSitemapUrl extends WebSitemapUrl {
 
