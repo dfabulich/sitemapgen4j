@@ -9,19 +9,19 @@ import java.util.List;
 /** Configurable sitemap url with support for Google extensions
  * @see <a href="https://support.google.com/webmasters/answer/183668">Manage your sitemaps</a>
  */
-public class GoogleExtensionSitemapUrl extends WebSitemapUrl {
+public class GoogleImageSitemapUrl extends WebSitemapUrl {
 
     private final List<Image> images;
 
-    public GoogleExtensionSitemapUrl(String url) throws MalformedURLException {
+    public GoogleImageSitemapUrl(String url) throws MalformedURLException {
         this(new Options(url));
     }
 
-    public GoogleExtensionSitemapUrl(URL url) {
+    public GoogleImageSitemapUrl(URL url) {
         this(new Options(url));
     }
 
-    public GoogleExtensionSitemapUrl(Options options) {
+    public GoogleImageSitemapUrl(Options options) {
         super(options);
         this.images = options.images;
     }
@@ -34,17 +34,17 @@ public class GoogleExtensionSitemapUrl extends WebSitemapUrl {
     }
 
     /** Options to configure Google Extension URLs */
-    public static class Options extends AbstractSitemapUrlOptions<GoogleExtensionSitemapUrl, GoogleExtensionSitemapUrl.Options> {
+    public static class Options extends AbstractSitemapUrlOptions<GoogleImageSitemapUrl, GoogleImageSitemapUrl.Options> {
         private List<Image> images;
 
 
         public Options(URL url) {
-            super(url, GoogleExtensionSitemapUrl.class);
+            super(url, GoogleImageSitemapUrl.class);
             images = new ArrayList<Image>();
         }
 
         public Options(String url) throws MalformedURLException {
-            super(url, GoogleExtensionSitemapUrl.class);
+            super(url, GoogleImageSitemapUrl.class);
             images = new ArrayList<Image>();
         }
 

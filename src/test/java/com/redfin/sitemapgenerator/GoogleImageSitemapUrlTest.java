@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class GoogleExtensionSitemapUrlTest extends TestCase {
+public class GoogleImageSitemapUrlTest extends TestCase {
 
     private static final URL LANDING_URL = newURL("http://www.example.com/index.html");
     private static final URL CONTENT_URL = newURL("http://www.example.com/index.flv");
     File dir;
-    GoogleExtensionSitemapGenerator wsg;
+    GoogleImageSitemapGenerator wsg;
 
     private static URL newURL(String url) {
         try {
@@ -41,8 +41,8 @@ public class GoogleExtensionSitemapUrlTest extends TestCase {
     }
 
     public void testSimpleUrl() throws Exception {
-        wsg = new GoogleExtensionSitemapGenerator("http://www.example.com", dir);
-        GoogleExtensionSitemapUrl url = new GoogleExtensionSitemapUrl(LANDING_URL);
+        wsg = new GoogleImageSitemapGenerator("http://www.example.com", dir);
+        GoogleImageSitemapUrl url = new GoogleImageSitemapUrl(LANDING_URL);
         url.addImage(new Image("http://cdn.example.com/image1.jpg"));
         url.addImage(new Image("http://cdn.example.com/image2.jpg"));
         wsg.addUrl(url);
@@ -63,8 +63,8 @@ public class GoogleExtensionSitemapUrlTest extends TestCase {
     }
 
     public void testBaseOptions() throws Exception {
-        wsg = new GoogleExtensionSitemapGenerator("http://www.example.com", dir);
-        GoogleExtensionSitemapUrl url = new GoogleExtensionSitemapUrl.Options(LANDING_URL)
+        wsg = new GoogleImageSitemapGenerator("http://www.example.com", dir);
+        GoogleImageSitemapUrl url = new GoogleImageSitemapUrl.Options(LANDING_URL)
                 .images(new Image("http://cdn.example.com/image1.jpg"), new Image("http://cdn.example.com/image2.jpg"))
                 .priority(0.5)
                 .changeFreq(ChangeFreq.WEEKLY)
@@ -93,8 +93,8 @@ public class GoogleExtensionSitemapUrlTest extends TestCase {
     }
 
     public void testImageOptions() throws Exception {
-        wsg = new GoogleExtensionSitemapGenerator("http://www.example.com", dir);
-        GoogleExtensionSitemapUrl url = new GoogleExtensionSitemapUrl.Options(LANDING_URL)
+        wsg = new GoogleImageSitemapGenerator("http://www.example.com", dir);
+        GoogleImageSitemapUrl url = new GoogleImageSitemapUrl.Options(LANDING_URL)
                 .images(new Image.ImageBuilder("http://cdn.example.com/image1.jpg")
                         .title("image1.jpg")
                         .caption("An image of the number 1")
@@ -142,13 +142,13 @@ public class GoogleExtensionSitemapUrlTest extends TestCase {
     }
 
     public void testTooManyImages() throws Exception {
-        wsg = new GoogleExtensionSitemapGenerator("http://www.example.com", dir);
+        wsg = new GoogleImageSitemapGenerator("http://www.example.com", dir);
         List<Image> images = new ArrayList<Image>();
         for(int i = 0; i <= 1000; i++) {
             images.add(new Image("http://cdn.example.com/image" + i + ".jpg"));
         }
         try {
-            GoogleExtensionSitemapUrl url = new GoogleExtensionSitemapUrl.Options(LANDING_URL)
+            GoogleImageSitemapUrl url = new GoogleImageSitemapUrl.Options(LANDING_URL)
                     .images(images)
                     .priority(0.5)
                     .changeFreq(ChangeFreq.WEEKLY)
@@ -160,7 +160,7 @@ public class GoogleExtensionSitemapUrlTest extends TestCase {
 
 
 
-    private String writeSingleSiteMap(GoogleExtensionSitemapGenerator wsg) {
+    private String writeSingleSiteMap(GoogleImageSitemapGenerator wsg) {
         List<File> files = wsg.write();
         assertEquals("Too many files: " + files.toString(), 1, files.size());
         assertEquals("Sitemap misnamed", "sitemap.xml", files.get(0).getName());

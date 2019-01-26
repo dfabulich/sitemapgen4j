@@ -8,10 +8,10 @@ import java.net.URL;
  * Builds an extended sitemap with google support for google extensions. To configure options use {@link #builder(URL, File)}
  * @see <a href="https://support.google.com/webmasters/answer/183668">Manage your sitemaps</a>
  * */
-public class GoogleExtensionSitemapGenerator extends SitemapGenerator<GoogleExtensionSitemapUrl, GoogleExtensionSitemapGenerator> {
+public class GoogleImageSitemapGenerator extends SitemapGenerator<GoogleImageSitemapUrl, GoogleImageSitemapGenerator> {
 
-    GoogleExtensionSitemapGenerator(AbstractSitemapGeneratorOptions<?> options) {
-        super(options, new GoogleExtensionSitemapGenerator.Renderer());
+    GoogleImageSitemapGenerator(AbstractSitemapGeneratorOptions<?> options) {
+        super(options, new GoogleImageSitemapGenerator.Renderer());
     }
 
     /** Configures the generator with a base URL and directory to write the sitemap files.
@@ -20,7 +20,7 @@ public class GoogleExtensionSitemapGenerator extends SitemapGenerator<GoogleExte
      * @param baseDir Sitemap files will be generated in this directory as either "sitemap.xml" or "sitemap1.xml" "sitemap2.xml" and so on.
      * @throws MalformedURLException
      */
-    public GoogleExtensionSitemapGenerator(String baseUrl, File baseDir)
+    public GoogleImageSitemapGenerator(String baseUrl, File baseDir)
             throws MalformedURLException {
         this(new SitemapGeneratorOptions(baseUrl, baseDir));
     }
@@ -30,7 +30,7 @@ public class GoogleExtensionSitemapGenerator extends SitemapGenerator<GoogleExte
      * @param baseUrl All URLs in the generated sitemap(s) should appear under this base URL
      * @param baseDir Sitemap files will be generated in this directory as either "sitemap.xml" or "sitemap1.xml" "sitemap2.xml" and so on.
      */
-    public GoogleExtensionSitemapGenerator(URL baseUrl, File baseDir) {
+    public GoogleImageSitemapGenerator(URL baseUrl, File baseDir) {
         this(new SitemapGeneratorOptions(baseUrl, baseDir));
     }
 
@@ -40,7 +40,7 @@ public class GoogleExtensionSitemapGenerator extends SitemapGenerator<GoogleExte
      *
      * @param baseUrl All URLs in the generated sitemap(s) should appear under this base URL
      */
-    public GoogleExtensionSitemapGenerator(String baseUrl) throws MalformedURLException {
+    public GoogleImageSitemapGenerator(String baseUrl) throws MalformedURLException {
         this(new SitemapGeneratorOptions(new URL(baseUrl)));
     }
 
@@ -50,7 +50,7 @@ public class GoogleExtensionSitemapGenerator extends SitemapGenerator<GoogleExte
      *
      * @param baseUrl All URLs in the generated sitemap(s) should appear under this base URL
      */
-    public GoogleExtensionSitemapGenerator(URL baseUrl) {
+    public GoogleImageSitemapGenerator(URL baseUrl) {
         this(new SitemapGeneratorOptions(baseUrl));
     }
 
@@ -60,8 +60,8 @@ public class GoogleExtensionSitemapGenerator extends SitemapGenerator<GoogleExte
      * @param baseDir Sitemap files will be generated in this directory as either "sitemap.xml" or "sitemap1.xml" "sitemap2.xml" and so on.
      * @return a builder; call .build() on it to make a sitemap generator
      */
-    public static SitemapGeneratorBuilder<GoogleExtensionSitemapGenerator> builder(URL baseUrl, File baseDir) {
-        return new SitemapGeneratorBuilder<GoogleExtensionSitemapGenerator>(baseUrl, baseDir, GoogleExtensionSitemapGenerator.class);
+    public static SitemapGeneratorBuilder<GoogleImageSitemapGenerator> builder(URL baseUrl, File baseDir) {
+        return new SitemapGeneratorBuilder<GoogleImageSitemapGenerator>(baseUrl, baseDir, GoogleImageSitemapGenerator.class);
     }
 
     /** Configures a builder so you can specify sitemap generator options
@@ -71,21 +71,21 @@ public class GoogleExtensionSitemapGenerator extends SitemapGenerator<GoogleExte
      * @return a builder; call .build() on it to make a sitemap generator
      * @throws MalformedURLException
      */
-    public static SitemapGeneratorBuilder<GoogleExtensionSitemapGenerator> builder(String baseUrl, File baseDir) throws MalformedURLException {
-        return new SitemapGeneratorBuilder<GoogleExtensionSitemapGenerator>(baseUrl, baseDir, GoogleExtensionSitemapGenerator.class);
+    public static SitemapGeneratorBuilder<GoogleImageSitemapGenerator> builder(String baseUrl, File baseDir) throws MalformedURLException {
+        return new SitemapGeneratorBuilder<GoogleImageSitemapGenerator>(baseUrl, baseDir, GoogleImageSitemapGenerator.class);
     }
 
-    private static class Renderer extends AbstractSitemapUrlRenderer<GoogleExtensionSitemapUrl> implements ISitemapUrlRenderer<GoogleExtensionSitemapUrl> {
+    private static class Renderer extends AbstractSitemapUrlRenderer<GoogleImageSitemapUrl> implements ISitemapUrlRenderer<GoogleImageSitemapUrl> {
 
-        public Class<GoogleExtensionSitemapUrl> getUrlClass() {
-            return GoogleExtensionSitemapUrl.class;
+        public Class<GoogleImageSitemapUrl> getUrlClass() {
+            return GoogleImageSitemapUrl.class;
         }
 
         public String getXmlNamespaces() {
             return "xmlns:image=\"http://www.google.com/schemas/sitemap-image/1.1\"";
         }
 
-        public void render(GoogleExtensionSitemapUrl url, StringBuilder sb, W3CDateFormat dateFormat) {
+        public void render(GoogleImageSitemapUrl url, StringBuilder sb, W3CDateFormat dateFormat) {
             StringBuilder tagSb = new StringBuilder();
 
             for(Image image : url.getImages()) {
