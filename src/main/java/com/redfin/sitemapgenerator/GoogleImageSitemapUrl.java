@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/** Configurable sitemap url with support for Google extensions
- * @see <a href="https://support.google.com/webmasters/answer/183668">Manage your sitemaps</a>
+/** One configurable Google Image Search URL.  To configure, use {@link Options}
+ *
+ * @see Options
+ * @see <a href="http://www.google.com/support/webmasters/bin/answer.py?answer=183668">Creating Image Sitemaps</a>
  */
 public class GoogleImageSitemapUrl extends WebSitemapUrl {
 

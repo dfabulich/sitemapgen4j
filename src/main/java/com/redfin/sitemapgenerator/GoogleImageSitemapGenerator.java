@@ -5,7 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Builds an extended sitemap with google support for google extensions. To configure options use {@link #builder(URL, File)}
+ * Builds a sitemap for Google Image search. To configure options use {@link #builder(URL, File)}
  * @see <a href="https://support.google.com/webmasters/answer/183668">Manage your sitemaps</a>
  * */
 public class GoogleImageSitemapGenerator extends SitemapGenerator<GoogleImageSitemapUrl, GoogleImageSitemapGenerator> {
