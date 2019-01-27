@@ -95,6 +95,7 @@ public class SitemapIndexGeneratorTest extends TestCase {
 				"</sitemapindex>";
 		String actual = TestUtil.slurpFileAndDelete(outFile);
 		assertEquals(expected, actual);
+		assertEquals(expected, sig.writeAsString());
 	}
 	
 	public void testMaxUrls() throws Exception {
@@ -107,6 +108,7 @@ public class SitemapIndexGeneratorTest extends TestCase {
 		sig.write();
 		String actual = TestUtil.slurpFileAndDelete(outFile);
 		assertEquals(INDEX, actual);
+		assertEquals(INDEX, sig.writeAsString());
 	}
 	
 	public void testOneUrl() throws Exception {
@@ -123,6 +125,7 @@ public class SitemapIndexGeneratorTest extends TestCase {
 				"  </sitemap>\n" + 
 				"</sitemapindex>";
 		assertEquals(expected, actual);
+		assertEquals(expected, sig.writeAsString());
 	}
 	
 	public void testAddByPrefix() throws MalformedURLException {
@@ -132,6 +135,7 @@ public class SitemapIndexGeneratorTest extends TestCase {
 		sig.write();
 		String actual = TestUtil.slurpFileAndDelete(outFile);
 		assertEquals(INDEX, actual);
+		assertEquals(INDEX, sig.writeAsString());
 	}
 	
 }
