@@ -221,18 +221,21 @@ public class SitemapIndexGenerator {
 	
 	/** Writes out the sitemap index */
 	public void write() {
+		try {
+			// TODO gzip? is that legal for a sitemap index?
+			write(new FileWriter(outFile));
+		} catch (IOException e) {
+			throw new RuntimeException("Problem writing sitemap index file " + outFile, e);
+		}
+	}
+
+	private void write(OutputStreamWriter out) {
 		if (!allowEmptyIndex && urls.isEmpty()) throw new RuntimeException("No URLs added, sitemap index would be empty; you must add some URLs with addUrls");
 		try {
-			FileWriter out = null;
 			try {
-				// TODO gzip? is that legal for a sitemap index?
-				out = new FileWriter(outFile);
 				writeSiteMap(out);
 				out.flush();
-
 				if (autoValidate) SitemapValidator.validateSitemapIndex(outFile);
-			} catch (IOException e) {
-				throw new RuntimeException("Problem writing sitemap index file " + outFile, e);
 			} catch (SAXException e) {
 				throw new RuntimeException("Problem validating sitemap index file (bug?)", e);
 			} finally {
@@ -246,26 +249,38 @@ public class SitemapIndexGenerator {
 
 	}
 	
-	private void writeSiteMap(OutputStreamWriter out) throws IOException {
-		out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"); 
-		out.write("<sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n");
+	public String writeAsString() {
+		StringBuilder sb = new StringBuilder();
+		writeAsString(sb);
+		return sb.toString();
+	}
+
+	private void writeAsString(StringBuilder sb) {
+		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"); 
+		sb.append("<sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n");
 		for (SitemapIndexUrl url : urls) {
-			out.write("  <sitemap>\n");
-			out.write("    <loc>");
-			out.write(UrlUtils.escapeXml(url.url.toString()));
-			out.write("</loc>\n");
+			sb.append("  <sitemap>\n");
+			sb.append("    <loc>");
+			sb.append(UrlUtils.escapeXml(url.url.toString()));
+			sb.append("</loc>\n");
 			Date lastMod = url.lastMod;
 			
 			if (lastMod == null) lastMod = defaultLastMod;
 			
 			if (lastMod != null) {
-				out.write("    <lastmod>");
-				out.write(dateFormat.format(lastMod));
-				out.write("</lastmod>\n");
+				sb.append("    <lastmod>");
+				sb.append(dateFormat.format(lastMod));
+				sb.append("</lastmod>\n");
 			}
-			out.write("  </sitemap>\n");
+			sb.append("  </sitemap>\n");
 		}
-		out.write("</sitemapindex>");
+		sb.append("</sitemapindex>");
+	}
+
+	private void writeSiteMap(OutputStreamWriter out) throws IOException {
+		StringBuilder sb = new StringBuilder();
+		writeAsString(sb);
+		out.write(sb.toString());
 	}
 
 }
