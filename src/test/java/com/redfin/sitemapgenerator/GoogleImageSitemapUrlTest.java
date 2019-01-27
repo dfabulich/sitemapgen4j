@@ -68,7 +68,6 @@ public class GoogleImageSitemapUrlTest extends TestCase {
                 .images(new Image("http://cdn.example.com/image1.jpg"), new Image("http://cdn.example.com/image2.jpg"))
                 .priority(0.5)
                 .changeFreq(ChangeFreq.WEEKLY)
-                .lastMod(new Date(0))
                 .build();
         wsg.addUrl(url);
 
@@ -76,7 +75,6 @@ public class GoogleImageSitemapUrlTest extends TestCase {
                 "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:image=\"http://www.google.com/schemas/sitemap-image/1.1\" >\n" +
                 "  <url>\n" +
                 "    <loc>http://www.example.com/index.html</loc>\n" +
-                "    <lastmod>1970-01-01T08:00+08:00</lastmod>\n" +
                 "    <changefreq>weekly</changefreq>\n" +
                 "    <priority>0.5</priority>\n" +
                 "    <image:image>\n" +
@@ -109,7 +107,6 @@ public class GoogleImageSitemapUrlTest extends TestCase {
                                 .build())
                 .priority(0.5)
                 .changeFreq(ChangeFreq.WEEKLY)
-                .lastMod(new Date(0))
                 .build();
         wsg.addUrl(url);
 
@@ -117,7 +114,6 @@ public class GoogleImageSitemapUrlTest extends TestCase {
                 "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:image=\"http://www.google.com/schemas/sitemap-image/1.1\" >\n" +
                 "  <url>\n" +
                 "    <loc>http://www.example.com/index.html</loc>\n" +
-                "    <lastmod>1970-01-01T08:00+08:00</lastmod>\n" +
                 "    <changefreq>weekly</changefreq>\n" +
                 "    <priority>0.5</priority>\n" +
                 "    <image:image>\n" +
@@ -152,7 +148,6 @@ public class GoogleImageSitemapUrlTest extends TestCase {
                     .images(images)
                     .priority(0.5)
                     .changeFreq(ChangeFreq.WEEKLY)
-                    .lastMod(new Date(0))
                     .build();
             fail("Too many images allowed");
         } catch (RuntimeException r) {}
