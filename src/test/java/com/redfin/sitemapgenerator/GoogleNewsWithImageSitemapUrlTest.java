@@ -34,7 +34,7 @@ public class GoogleNewsWithImageSitemapUrlTest extends TestCase {
 		dateFormat.setTimeZone(W3CDateFormat.ZULU);
 		wsg = GoogleNewsWthImageSitemapGenerator.builder("http://www.example.com", dir)
 			.dateFormat(dateFormat).build();
-		GoogleNewsWithImageSitemapUrl url = new GoogleNewsWithImageSitemapUrl("http://www.example.com/index.html", new Date(0), "Example Title", "The Example Times", "en", "http://www.example.com/incoming/article123.html/articleimage.jpg", "articleimage.jpg");
+		GoogleNewsWithImageSitemapUrl url = new GoogleNewsWithImageSitemapUrl("http://www.example.com/index.html", new Date(0), "Example Title", "The Example Times", "en", "http://www.example.com/incoming/article123.html/articleimage.jpg", "articleimage.jpg", GoogleNewsWithImageSitemapUrl.AccessType.SUBSCRIPTION);
 		wsg.addUrl(url);
 		String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
 			"<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:news=\"http://www.google.com/schemas/sitemap-news/0.9\" xmlns:image=\"http://www.google.com/schemas/sitemap-image/1.1\" >\n" +
@@ -47,6 +47,7 @@ public class GoogleNewsWithImageSitemapUrlTest extends TestCase {
 			"      </news:publication>\n" +
 			"      <news:publication_date>1970-01-01T00:00:00Z</news:publication_date>\n" +
 			"      <news:title>Example Title</news:title>\n" +
+			"      <news:access>subscription</news:access>\n" +
 			"    </news:news>\n" +
 			"    <image:image>\n" +
 			"        <image:loc>http://www.example.com/incoming/article123.html/articleimage.jpg</image:loc>\n" +
@@ -63,7 +64,7 @@ public class GoogleNewsWithImageSitemapUrlTest extends TestCase {
 		dateFormat.setTimeZone(W3CDateFormat.ZULU);
 		wsg = GoogleNewsWthImageSitemapGenerator.builder("http://www.example.com", dir)
 			.dateFormat(dateFormat).build();
-		GoogleNewsWithImageSitemapUrl url = new GoogleNewsWithImageSitemapUrl.Options("http://www.example.com/index.html", new Date(0), "Example Title", "The Example Times", "en", "http://www.example.com/incoming/article123.html/articleimage.jpg", "articleimage.jpg")
+		GoogleNewsWithImageSitemapUrl url = new GoogleNewsWithImageSitemapUrl.Options("http://www.example.com/index.html", new Date(0), "Example Title", "The Example Times", "en", "http://www.example.com/incoming/article123.html/articleimage.jpg", "articleimage.jpg", GoogleNewsWithImageSitemapUrl.AccessType.NONE)
 			.keywords("Klaatu", "Barrata", "Nicto")
 			.build();
 		wsg.addUrl(url);
@@ -95,7 +96,7 @@ public class GoogleNewsWithImageSitemapUrlTest extends TestCase {
 		dateFormat.setTimeZone(W3CDateFormat.ZULU);
 		wsg = GoogleNewsWthImageSitemapGenerator.builder("http://www.example.com", dir)
 			.dateFormat(dateFormat).build();
-		GoogleNewsWithImageSitemapUrl url = new GoogleNewsWithImageSitemapUrl.Options("http://www.example.com/index.html", new Date(0), "Example Title", "The Example Times", "en", "http://www.example.com/incoming/article123.html/articleimage.jpg", "articleimage.jpg")
+		GoogleNewsWithImageSitemapUrl url = new GoogleNewsWithImageSitemapUrl.Options("http://www.example.com/index.html", new Date(0), "Example Title", "The Example Times", "en", "http://www.example.com/incoming/article123.html/articleimage.jpg", "articleimage.jpg", GoogleNewsWithImageSitemapUrl.AccessType.NONE)
 			.genres("persbericht")
 			.build();
 		wsg.addUrl(url);

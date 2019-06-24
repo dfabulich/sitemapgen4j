@@ -13,6 +13,27 @@ import java.util.Date;
  */
 public class GoogleNewsWithImageSitemapUrl extends WebSitemapUrl {
 
+	public enum AccessType {
+		NONE("none"),
+		SUBSCRIPTION("subscription"),
+		REGISTRATION("registration");
+
+		private final String name;
+		AccessType(String name) {
+			this.name = name;
+		}
+
+		/** The pretty name for this filetype */
+		public String getName() {
+			return name;
+		}
+
+		@Override
+		public String toString() {
+			return this.name().toLowerCase();
+		}
+	}
+
 	private final Date publicationDate;
 	private final String keywords;
 	private final String genres;
@@ -20,6 +41,7 @@ public class GoogleNewsWithImageSitemapUrl extends WebSitemapUrl {
 	private final GoogleNewsPublication publication;
 	private final String imageLocation;
 	private final String imageTitle;
+	private final AccessType accessType; //Subscription or Registration (if applicable).
 
 	/** Options to configure Google News URLs */
 	public static class Options extends AbstractSitemapUrlOptions<GoogleNewsWithImageSitemapUrl, Options> {
@@ -30,22 +52,23 @@ public class GoogleNewsWithImageSitemapUrl extends WebSitemapUrl {
 		private GoogleNewsPublication publication;
 		private String imageLocation;
 		private String imageTitle;
+		private final AccessType accessType;
 
 		/** Specifies an URL and publication date (which is mandatory for Google News) */
-		public Options(String url, Date publicationDate, String title, GoogleNewsPublication publication, String imageLocation, String imageTitle) throws MalformedURLException {
-			this(new URL(url), publicationDate, title, publication, imageLocation, imageTitle);
+		public Options(String url, Date publicationDate, String title, GoogleNewsPublication publication, String imageLocation, String imageTitle, AccessType accessType) throws MalformedURLException {
+			this(new URL(url), publicationDate, title, publication, imageLocation, imageTitle, accessType);
 		}
 
-		public Options(String url, Date publicationDate, String title, String name, String language, String imageLocation, String imageTitle) throws MalformedURLException {
-			this(new URL(url), publicationDate, title, new GoogleNewsPublication(name, language), imageLocation, imageTitle);
+		public Options(String url, Date publicationDate, String title, String name, String language, String imageLocation, String imageTitle, AccessType accessType) throws MalformedURLException {
+			this(new URL(url), publicationDate, title, new GoogleNewsPublication(name, language), imageLocation, imageTitle, accessType);
 		}
 
-		public Options(URL url, Date publicationDate, String title, String name, String language, String imageLocation, String imageTitle) {
-			this(url, publicationDate, title, new GoogleNewsPublication(name, language), imageLocation, imageTitle);
+		public Options(URL url, Date publicationDate, String title, String name, String language, String imageLocation, String imageTitle, AccessType accessType) {
+			this(url, publicationDate, title, new GoogleNewsPublication(name, language), imageLocation, imageTitle, accessType);
 		}
 
 		/** Specifies an URL and publication date (which is mandatory for Google News) */
-		public Options(URL url, Date publicationDate, String title, GoogleNewsPublication publication, String imageLocation, String imageTitle) {
+		public Options(URL url, Date publicationDate, String title, GoogleNewsPublication publication, String imageLocation, String imageTitle, AccessType accessType) {
 			super(url, GoogleNewsWithImageSitemapUrl.class);
 			if (publicationDate == null) throw new NullPointerException("publicationDate must not be null");
 			this.publicationDate = publicationDate;
@@ -57,6 +80,7 @@ public class GoogleNewsWithImageSitemapUrl extends WebSitemapUrl {
 			this.publication = publication;
 			this.imageLocation = imageLocation;
 			this.imageTitle = imageTitle;
+			this.accessType = accessType;
 		}
 
 		/** Specifies a list of comma-delimited keywords */
@@ -107,23 +131,23 @@ public class GoogleNewsWithImageSitemapUrl extends WebSitemapUrl {
 	}
 
 	/** Specifies an URL and publication date, title and publication (which are mandatory for Google News) */
-	public GoogleNewsWithImageSitemapUrl(URL url, Date publicationDate, String title, String name, String language, String imageLocation, String imageTitle) {
-		this(new Options(url, publicationDate, title, name, language, imageLocation, imageTitle));
+	public GoogleNewsWithImageSitemapUrl(URL url, Date publicationDate, String title, String name, String language, String imageLocation, String imageTitle, AccessType accessType) {
+		this(new Options(url, publicationDate, title, name, language, imageLocation, imageTitle, accessType));
 	}
 
 	/** Specifies an URL and publication date, title and publication (which are mandatory for Google News) */
-	public GoogleNewsWithImageSitemapUrl(URL url, Date publicationDate, String title, GoogleNewsPublication publication, String imageLocation, String imageTitle) {
-		this(new Options(url, publicationDate, title, publication, imageLocation, imageTitle));
+	public GoogleNewsWithImageSitemapUrl(URL url, Date publicationDate, String title, GoogleNewsPublication publication, String imageLocation, String imageTitle, AccessType accessType) {
+		this(new Options(url, publicationDate, title, publication, imageLocation, imageTitle, accessType));
 	}
 
 	/** Specifies an URL and publication date, title and publication (which are mandatory for Google News) */
-	public GoogleNewsWithImageSitemapUrl(String url, Date publicationDate, String title, String name, String language, String imageLocation, String imageTitle) throws MalformedURLException {
-		this(new Options(url, publicationDate, title, name, language, imageLocation, imageTitle));
+	public GoogleNewsWithImageSitemapUrl(String url, Date publicationDate, String title, String name, String language, String imageLocation, String imageTitle, AccessType accessType) throws MalformedURLException {
+		this(new Options(url, publicationDate, title, name, language, imageLocation, imageTitle, accessType));
 	}
 
 	/** Specifies an URL and publication date, title and publication (which are mandatory for Google News) */
-	public GoogleNewsWithImageSitemapUrl(String url, Date publicationDate, String title, GoogleNewsPublication publication, String imageLocation, String imageTitle) throws MalformedURLException {
-		this(new Options(url, publicationDate, title, publication, imageLocation, imageTitle));
+	public GoogleNewsWithImageSitemapUrl(String url, Date publicationDate, String title, GoogleNewsPublication publication, String imageLocation, String imageTitle, AccessType accessType) throws MalformedURLException {
+		this(new Options(url, publicationDate, title, publication, imageLocation, imageTitle, accessType));
 	}
 
 	/** Configures an URL with options */
@@ -136,6 +160,7 @@ public class GoogleNewsWithImageSitemapUrl extends WebSitemapUrl {
 		publication = options.publication;
 		imageLocation = options.imageLocation;
 		imageTitle = options.imageTitle;
+		accessType = options.accessType;
 	}
 
 	/** Retrieves the publication date */
@@ -172,4 +197,9 @@ public class GoogleNewsWithImageSitemapUrl extends WebSitemapUrl {
 	public String getImageLocation() { return imageLocation; }
 
 	public String getImageTitle() { return imageTitle; }
+
+	public AccessType getAccessType() { return accessType;
+	}
 }
+
+

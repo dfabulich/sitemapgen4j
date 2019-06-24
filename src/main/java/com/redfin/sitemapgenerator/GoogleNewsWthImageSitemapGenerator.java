@@ -108,6 +108,10 @@ public class GoogleNewsWthImageSitemapGenerator extends SitemapGenerator<GoogleN
 			renderTag(tagSb, "news", "publication_date", dateFormat.format(url.getPublicationDate()));
 			renderTag(tagSb, "news", "title", url.getTitle());
 			renderTag(tagSb, "news", "keywords", url.getKeywords());
+			if (!GoogleNewsWithImageSitemapUrl.AccessType.NONE.equals(url.getAccessType())) {
+				renderTag(tagSb, "news", "access", url.getAccessType().getName());
+			}
+
 			tagSb.append("    </news:news>\n");
 			tagSb.append("    <image:image>\n");
 			renderSubTag(tagSb, "image", "loc", url.getImageLocation());
