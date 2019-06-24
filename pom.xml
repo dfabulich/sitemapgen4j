@@ -15,13 +15,21 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-  <scm>
-    <connection>scm:git:git://github.com:dfabulich/sitemapgen4j.git</connection>
-    <developerConnection>scm:git:git@github.com:dfabulich/sitemapgen4j.git</developerConnection>
-    <url>https://github.com/dfabulich/sitemapgen4j/</url>
-  </scm>
+
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>1.8</java.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+
+    <maven.build.timestamp.format>yyyy.Mdd.Hmmss</maven.build.timestamp.format>
+    <sonar.projectVersion>${maven.build.timestamp}</sonar.projectVersion>
+    <jacoco.outputDir>${project.build.directory}</jacoco.outputDir>
+    <jacoco.out.ut.file>jacoco-ut.exec</jacoco.out.ut.file>
+    <sonar.jacoco.reportPath>${jacoco.outputDir}/${jacoco.out.ut.file}</sonar.jacoco.reportPath>
+    <jacoco.out.it.file>jacoco-it.exec</jacoco.out.it.file>
+    <sonar.jacoco.reportPaths>${jacoco.outputDir}/${jacoco.out.it.file}</sonar.jacoco.reportPaths>
+    <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+    <mongo-java-driver.version>3.6.4</mongo-java-driver.version>
   </properties>
   <developers>
     <developer>
@@ -33,88 +41,78 @@
       <timezone>-8</timezone>
     </developer>
   </developers>
-  <distributionManagement>
-    <snapshotRepository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-    <repository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-  </distributionManagement>
   <build>
-    <defaultGoal>install</defaultGoal>
+    <finalName>${project.artifactId}</finalName>
     <plugins>
       <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
+          <argLine>${jacoco.agent.ut.arg}</argLine>
+          <properties>
+            <property>
+              <name>listener</name>
+              <value>org.sonar.java.jacoco.JUnitListener</value>
+            </property>
+          </properties>
         </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-eclipse-plugin</artifactId>
-        <version>2.5.1</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <version>2.4</version>
+        <artifactId>maven-failsafe-plugin</artifactId>
         <executions>
           <execution>
-            <id>attach-sources</id>
             <goals>
-              <goal>jar-no-fork</goal>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
+        </configuration>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.10.1</version>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.1</version>
         <executions>
           <execution>
-            <id>attach-javadocs</id>
+            <id>prepare-ut-agent</id>
+            <phase>process-test-classes</phase>
             <goals>
-              <goal>jar</goal>
+              <goal>prepare-agent</goal>
             </goals>
             <configuration>
-              <additionalparam>-Xdoclint:none</additionalparam>
+              <destFile>${sonar.jacoco.reportPath}</destFile>
+              <propertyName>jacoco.agent.ut.arg</propertyName>
+              <append>true</append>
+            </configuration>
+          </execution>
+          <execution>
+            <id>prepare-it-agent</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+            <configuration>
+              <destFile>${sonar.jacoco.itReportPath}</destFile>
+              <propertyName>jacoco.agent.it.arg</propertyName>
+              <append>true</append>
             </configuration>
           </execution>
         </executions>
       </plugin>
-<!--      <plugin>-->
-<!--        <groupId>org.apache.maven.plugins</groupId>-->
-<!--        <artifactId>maven-gpg-plugin</artifactId>-->
-<!--        <version>1.5</version>-->
-<!--        <executions>-->
-<!--          <execution>-->
-<!--            <id>sign-artifacts</id>-->
-<!--            <phase>verify</phase>-->
-<!--            <goals>-->
-<!--              <goal>sign</goal>-->
-<!--            </goals>-->
-<!--          </execution>-->
-<!--        </executions>-->
-<!--      </plugin>-->
-<!--      <plugin>-->
-<!--        <groupId>org.sonatype.plugins</groupId>-->
-<!--        <artifactId>nexus-staging-maven-plugin</artifactId>-->
-<!--        <version>1.6.3</version>-->
-<!--        <extensions>true</extensions>-->
-<!--        <configuration>-->
-<!--           <serverId>ossrh</serverId>-->
-<!--           <nexusUrl>https://oss.sonatype.org/</nexusUrl>-->
-<!--           <autoReleaseAfterClose>false</autoReleaseAfterClose>-->
-<!--        </configuration>-->
-<!--      </plugin>-->
     </plugins>
   </build>
+
+  <distributionManagement>
+    <repository>
+      <id>bild-central</id>
+      <name>bild repository</name>
+      <url>https://spring.jfrog.io/spring/libs-release-local/</url>
+    </repository>
+  </distributionManagement>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
