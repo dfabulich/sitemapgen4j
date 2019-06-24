@@ -94,7 +94,7 @@ public class GoogleNewsWthImageSitemapGenerator extends SitemapGenerator<GoogleN
 		}
 
 		public String getXmlNamespaces() {
-			return "xmlns:news=\"http://www.google.com/schemas/sitemap-news/0.9\" xmlns:news=\"http://www.google.com/schemas/sitemap-image/1.1\"";
+			return "xmlns:news=\"http://www.google.com/schemas/sitemap-news/0.9\" xmlns:image=\"http://www.google.com/schemas/sitemap-image/1.1\"";
 		}
 
 		public void render(GoogleNewsWithImageSitemapUrl url, StringBuilder sb, W3CDateFormat dateFormat) {

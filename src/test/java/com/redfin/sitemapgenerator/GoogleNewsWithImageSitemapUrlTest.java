@@ -37,7 +37,7 @@ public class GoogleNewsWithImageSitemapUrlTest extends TestCase {
 		GoogleNewsWithImageSitemapUrl url = new GoogleNewsWithImageSitemapUrl("http://www.example.com/index.html", new Date(0), "Example Title", "The Example Times", "en", "http://www.example.com/incoming/article123.html/articleimage.jpg", "articleimage.jpg");
 		wsg.addUrl(url);
 		String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
-			"<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:news=\"http://www.google.com/schemas/sitemap-news/0.9\" xmlns:news=\"http://www.google.com/schemas/sitemap-image/1.1\" >\n" +
+			"<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:news=\"http://www.google.com/schemas/sitemap-news/0.9\" xmlns:image=\"http://www.google.com/schemas/sitemap-image/1.1\" >\n" +
 			"  <url>\n" + 
 			"    <loc>http://www.example.com/index.html</loc>\n" + 
 			"    <news:news>\n" + 
@@ -68,7 +68,7 @@ public class GoogleNewsWithImageSitemapUrlTest extends TestCase {
 			.build();
 		wsg.addUrl(url);
 		String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-			"<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:news=\"http://www.google.com/schemas/sitemap-news/0.9\" xmlns:news=\"http://www.google.com/schemas/sitemap-image/1.1\" >\n" +
+			"<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:news=\"http://www.google.com/schemas/sitemap-news/0.9\" xmlns:image=\"http://www.google.com/schemas/sitemap-image/1.1\" >\n" +
 			"  <url>\n" +
 			"    <loc>http://www.example.com/index.html</loc>\n" +
 			"    <news:news>\n" +
@@ -100,7 +100,7 @@ public class GoogleNewsWithImageSitemapUrlTest extends TestCase {
 			.build();
 		wsg.addUrl(url);
 		String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-			"<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:news=\"http://www.google.com/schemas/sitemap-news/0.9\" xmlns:news=\"http://www.google.com/schemas/sitemap-image/1.1\" >\n" +
+			"<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:news=\"http://www.google.com/schemas/sitemap-news/0.9\" xmlns:image=\"http://www.google.com/schemas/sitemap-image/1.1\" >\n" +
 			"  <url>\n" +
 			"    <loc>http://www.example.com/index.html</loc>\n" +
 			"    <news:news>\n" +
