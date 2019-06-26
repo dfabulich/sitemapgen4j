@@ -113,11 +113,12 @@ public class GoogleNewsWthImageSitemapGenerator extends SitemapGenerator<GoogleN
 			}
 
 			tagSb.append("    </news:news>\n");
-			tagSb.append("    <image:image>\n");
-			renderSubTag(tagSb, "image", "loc", url.getImageLocation());
-			renderSubTag(tagSb, "image", "title", url.getImageTitle());
-			tagSb.append("    </image:image>\n");
-
+			if (url.getImageLocation() != null) {
+				tagSb.append("    <image:image>\n");
+				renderSubTag(tagSb, "image", "loc", url.getImageLocation());
+				renderSubTag(tagSb, "image", "title", url.getImageTitle());
+				tagSb.append("    </image:image>\n");
+			}
 
 			super.render(url, sb, dateFormat, tagSb.toString());
 		}
