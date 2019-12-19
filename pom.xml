@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.dfabulich</groupId>
   <artifactId>lean-sitemapgen4j</artifactId>
@@ -22,12 +21,14 @@
     <maven.compiler.target>${java.version}</maven.compiler.target>
 
     <maven.build.timestamp.format>yyyy.Mdd.Hmmss</maven.build.timestamp.format>
-    <sonar.projectVersion>${maven.build.timestamp}</sonar.projectVersion>
-    <jacoco.outputDir>${project.build.directory}</jacoco.outputDir>
+    <jacoco.outputDir>${project.build.directory}/jacoco-out/</jacoco.outputDir>
+    <jacoco.reportDir>${project.build.directory}/jacoco/</jacoco.reportDir>
     <jacoco.out.ut.file>jacoco-ut.exec</jacoco.out.ut.file>
-    <sonar.jacoco.reportPath>${jacoco.outputDir}/${jacoco.out.ut.file}</sonar.jacoco.reportPath>
     <jacoco.out.it.file>jacoco-it.exec</jacoco.out.it.file>
-    <sonar.jacoco.reportPaths>${jacoco.outputDir}/${jacoco.out.it.file}</sonar.jacoco.reportPaths>
+    <jacoco.out.merged.file>jacoco-merged.exec</jacoco.out.merged.file>
+
+    <sonar.projectVersion>${maven.build.timestamp}</sonar.projectVersion>
+    <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
     <mongo-java-driver.version>3.6.4</mongo-java-driver.version>
   </properties>
@@ -69,13 +70,14 @@
           </execution>
         </executions>
         <configuration>
+          <argLine>${jacoco.agent.it.arg}</argLine>
           <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
         </configuration>
       </plugin>
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.8.1</version>
+        <version>0.8.5</version>
         <executions>
           <execution>
             <id>prepare-ut-agent</id>
@@ -84,7 +86,7 @@
               <goal>prepare-agent</goal>
             </goals>
             <configuration>
-              <destFile>${sonar.jacoco.reportPath}</destFile>
+              <destFile>${jacoco.outputDir}/${jacoco.out.ut.file}</destFile>
               <propertyName>jacoco.agent.ut.arg</propertyName>
               <append>true</append>
             </configuration>
@@ -96,9 +98,38 @@
               <goal>prepare-agent</goal>
             </goals>
             <configuration>
-              <destFile>${sonar.jacoco.itReportPath}</destFile>
+              <destFile>${jacoco.outputDir}/${jacoco.out.it.file}</destFile>
               <propertyName>jacoco.agent.it.arg</propertyName>
               <append>true</append>
+            </configuration>
+          </execution>
+          <execution>
+            <id>jacoco-merge</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>merge</goal>
+            </goals>
+            <configuration>
+              <fileSets>
+                <fileSet>
+                  <directory>${jacoco.outputDir}</directory>
+                  <includes>
+                    <include>*.exec</include>
+                  </includes>
+                </fileSet>
+              </fileSets>
+              <destFile>${jacoco.outputDir}/${jacoco.out.merged.file}</destFile>
+            </configuration>
+          </execution>
+          <execution>
+            <id>jacoco-report</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+            <configuration>
+              <dataFile>${jacoco.outputDir}/${jacoco.out.merged.file}</dataFile>
+              <outputDirectory>${jacoco.reportDir}</outputDirectory>
             </configuration>
           </execution>
         </executions>
