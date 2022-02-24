@@ -223,6 +223,14 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 
 	/**
 	 * After you've called {@link #write()}, call this to generate a sitemap index of all sitemaps you generated.
+	 * The sitemap index is written to {baseDir}/<customized file name> instead of {baseDir}/sitemap_index.xml
+	 */
+	public File writeSitemapsWithIndex(final String fileName){
+		return writeSitemapsWithIndex(new File(baseDir, fileName));
+	}
+
+	/**
+	 * After you've called {@link #write()}, call this to generate a sitemap index of all sitemaps you generated.
 	 */
 	public String writeSitemapsWithIndexAsString() {
 		return prepareSitemapIndexGenerator(null).writeAsString();
